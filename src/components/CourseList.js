@@ -1,5 +1,5 @@
 import React from 'react';
-import './CourseList.css';
+import '../styles/CourseList.css';
 import Course from './Course';
 
 class CourseList extends React.Component {
@@ -14,9 +14,9 @@ class CourseList extends React.Component {
 
     componentDidMount() {
         fetch('http://localhost:8080/api/courses', {
-            method: 'get',
+            method: 'GET',
             headers: new Headers({
-                'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwY2Y3YjQ5ZDliZjA2MjhjYzZkNWIzMCIsImlhdCI6MTYyNDM5MDg1NiwiZXhwIjoxNjI0NDc3MjU2fQ.vUBDxdm9A9W85PYMSFOyMGiEdj7EwKekfNjfFGlgKxY'
+                'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwY2Y3YjQ5ZDliZjA2MjhjYzZkNWIzMCIsImlhdCI6MTYyNDQ3NzY2MiwiZXhwIjoxNjI0NTY0MDYyfQ.6jCCvElO6hoSR8Rh2YGwCzjMaxcuX04VLH6YafpWbWA'
             })
         })
         .then(res => res.json())
@@ -43,7 +43,7 @@ class CourseList extends React.Component {
             return <div>Loading...</div>;
         } else {
             return (
-                <div className="courses-wrapper">
+                <div className="Courses-wrapper">
                     {this.state.courses.map(course => <Course course={course} key={course.id}/>)}
                 </div>
             );

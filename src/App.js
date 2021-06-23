@@ -6,7 +6,8 @@ import SignIn from './SignIn';
 import About from './About';
 import SignUp from './SignUp';
 import { Container } from '@material-ui/core';
-import CourseList from './CourseList';
+import CourseList from './components/CourseList';
+import CourseForm from './components/CourseForm';
 
 function App() {
   return (
@@ -25,8 +26,9 @@ function App() {
             </Route>
             <Route exact path="/courses">
               <CourseList />
-              {/* <PostList showFavs={false} posts={posts} favs={favs} addToFavs={addToFavs}
-                                removeFromFavs={removeFromFavs} editPost={editPost} deletePost={deletePost} /> */}
+            </Route>
+            <Route exact path="/courses/create-course">
+              <CourseForm />
             </Route>
             <Route path="/">
               <div>Home</div>
