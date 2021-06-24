@@ -46,7 +46,7 @@ const validationSchema = yup.object({
 
 export default function CourseForm({ loggedInUser }) {
   const classes = useStyles();
-  let history = useHistory();
+  const history = useHistory();
 
   // useEffect(() => {
   //   if (!loggedInUser) {
@@ -71,8 +71,6 @@ export default function CourseForm({ loggedInUser }) {
             description: values.description,
             githubRepoName: values.githubRepoName
         };
-
-        console.log(course)
 
         fetch('http://localhost:8080/api/courses', {
             method: 'POST',
