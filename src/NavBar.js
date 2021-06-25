@@ -1,7 +1,9 @@
 import { AppBar, IconButton, MenuItem, Toolbar, Typography } from "@material-ui/core";
 import { Link } from "react-router-dom";
+import SignOut from './SignOut';
 
-function NavBar() {
+function NavBar({ loggedInUser, handleSignOut }) {
+    console.log(loggedInUser)
     return (
         <div>
             <AppBar position="static">
@@ -9,8 +11,9 @@ function NavBar() {
                     <IconButton component={Link} to={'/'} edge="start" color="inherit" aria-label="menu">
                         <Typography variant="h4">Grader</Typography>
                     </IconButton>
-                    <MenuItem component={Link} to={'/sign-in'}>Sign In</MenuItem>
-                    <MenuItem component={Link} to={'/about'}>About</MenuItem>
+                    {!loggedInUser ? <MenuItem component={Link} to={'/sign-in'}>Sign In</MenuItem> : null}
+                    {!loggedInUser ? <MenuItem component={Link} to={'/sign-up'}>Sign Up</MenuItem> : null}
+                    {loggedInUser ? <SignOut handleSignOut={handleSignOut} />: null}
                 </Toolbar>
             </AppBar>
         </div>

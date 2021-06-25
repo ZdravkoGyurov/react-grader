@@ -9,6 +9,7 @@ import Container from '@material-ui/core/Container';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
 import { useHistory } from "react-router-dom";
+import { getAccessToken } from '../userIdentity';
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -48,11 +49,11 @@ export default function CourseForm({ loggedInUser }) {
   const classes = useStyles();
   const history = useHistory();
 
-  // useEffect(() => {
-  //   if (!loggedInUser) {
-  //     history.push('/sign-in')
-  //   }
-  // });
+  useEffect(() => {
+    if (!loggedInUser) {
+      history.push('/sign-in')
+    }
+  });
 
   const formik = useFormik({
     initialValues: {
@@ -62,11 +63,8 @@ export default function CourseForm({ loggedInUser }) {
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
-    //   const recipe = new Recipe(loggedInUser.id, values.name, values.shortDescription);
-    //   onSubmitCourse(recipe);
-
         const course = {
-            // userId: '60cf7b49d9bf0628cc6d5b30',
+            userId: loggedInUser,
             name: values.name,
             description: values.description,
             githubRepoName: values.githubRepoName
@@ -77,21 +75,18 @@ export default function CourseForm({ loggedInUser }) {
             body: JSON.stringify(course),
             headers: new Headers({
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwY2Y3YjQ5ZDliZjA2MjhjYzZkNWIzMCIsImlhdCI6MTYyNDQ4MzA4OCwiZXhwIjoxNjI0NTY5NDg4fQ.ibM6u0Myuc0mEOI1DTQo74ElN5mgoub5I5TBCP2nwag'
+                'Authorization': `Bearer ${getAccessToken()}`
             }),
           })
-            .then(res => res.json())
-            .then(
-              (result) => {
-                 console.log('success')
-              },
-              (error) => {
-                  console.log(error)
-              }
-          )
-            // .then(json => setUser(json.user))
-
-        history.push("/courses");
+          .then(res => res.json())
+          .then(
+            (result) => {
+              history.push("/courses");
+            },
+            (error) => {
+                console.log(error)
+            }
+        );
     },
   });
 

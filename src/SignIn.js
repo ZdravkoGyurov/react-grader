@@ -5,7 +5,6 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
@@ -15,19 +14,6 @@ import * as yup from 'yup';
 import { useFormik } from 'formik';
 import { useHistory } from "react-router-dom";
 import { authenticate } from './userIdentity';
-
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {'Copyright © '}
-      <Link color="inherit" href="https://material-ui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -58,7 +44,7 @@ const validationSchema = yup.object({
     .required('Password is required')
 });
 
-export default function SignIn() {
+export default function SignIn({ loggedInUser, handleSignIn }) {
   const classes = useStyles();
   const history = useHistory();
 
@@ -77,18 +63,17 @@ export default function SignIn() {
                 'Authorization': `Basic ${token}`
             }),
           })
-            .then(res => res.json())
-            .then(
-              (result) => {
-                authenticate(result.user);
-              },
-              (error) => {
-                  console.log(error);
-              }
-          )
-            // .then(json => setUser(json.user))
-
-        // history.push("/courses");
+          .then(res => res.json())
+          .then(
+            (result) => {
+              authenticate(result);
+                handleSignIn();
+                history.push("/courses");
+            },
+            (error) => {
+                console.log(error);
+            }
+          );
     },
   });
 
@@ -143,25 +128,11 @@ export default function SignIn() {
           >
             Sign In
           </Button>
-
           <Link component={RouteLink} to={'/sign-up'} variant="body2">
             {"Don't have an account? Sign Up"}
           </Link>
-
         </form>
       </div>
-      <Box mt={8}>
-        <Copyright />
-      </Box>
     </Container>
   );
 }
-
-// const handleSignIn = (event) => {
-//   event.preventDefault();
-  
-//   const email = event.target.email.value;
-//   const password = event.target.password.value;
-
-//   alert('email: ' + email + ' password: ' + password);
-// }

@@ -1,10 +1,12 @@
 import React from 'react';
 import '../styles/CourseList.css';
 import Course from './Course';
+import { getAccessToken } from '../userIdentity';
 
 class CourseList extends React.Component {
     constructor(props) {
         super(props);
+
         this.state = {
             error: null,
             isLoaded: false,
@@ -16,7 +18,7 @@ class CourseList extends React.Component {
         fetch('http://localhost:8080/api/courses', {
             method: 'GET',
             headers: new Headers({
-                'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwY2Y3YjQ5ZDliZjA2MjhjYzZkNWIzMCIsImlhdCI6MTYyNDQ3NzY2MiwiZXhwIjoxNjI0NTY0MDYyfQ.6jCCvElO6hoSR8Rh2YGwCzjMaxcuX04VLH6YafpWbWA'
+                'Authorization': `Bearer ${getAccessToken()}`
             })
         })
         .then(res => res.json())

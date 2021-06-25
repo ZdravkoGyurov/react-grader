@@ -8,27 +8,40 @@ import SignUp from './SignUp';
 import { Container } from '@material-ui/core';
 import CourseList from './components/CourseList';
 import CourseForm from './components/CourseForm';
+import { authenticate, getUserId, clearAuth } from './userIdentity';
+import { useState } from 'react';
 
 function App() {
+  const [loggedInUser, setLoggedInUser] = useState(null);
+
+  const handleSignIn = () => {
+    setLoggedInUser(getUserId());
+  };
+
+  const handleSignOut = () => {
+    clearAuth();
+    setLoggedInUser(null);
+  }
+
   return (
     <Router>
       <Container className="App">
-      <NavBar />
+      <NavBar loggedInUser={loggedInUser} handleSignOut={handleSignOut}/>
         <Switch>
             <Route exact path="/about">
               <About />
             </Route>
             <Route exact path="/sign-in">
-              <SignIn />
+              <SignIn loggedInUser={loggedInUser} handleSignIn={handleSignIn}/>
             </Route>
             <Route exact path="/sign-up">
               <SignUp />
             </Route>
             <Route exact path="/courses">
-              <CourseList />
+              <CourseList loggedInUser={loggedInUser} />
             </Route>
             <Route exact path="/courses/create-course">
-              <CourseForm />
+              <CourseForm loggedInUser={loggedInUser} />
             </Route>
             <Route path="/">
               <div>Home</div>
