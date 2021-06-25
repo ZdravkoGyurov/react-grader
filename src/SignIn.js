@@ -44,7 +44,7 @@ const validationSchema = yup.object({
     .required('Password is required')
 });
 
-export default function SignIn({ loggedInUser, handleSignIn }) {
+export default function SignIn({ handleSignIn }) {
   const classes = useStyles();
   const history = useHistory();
 

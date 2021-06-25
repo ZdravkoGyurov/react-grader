@@ -2,6 +2,7 @@ import React from 'react';
 import '../styles/CourseList.css';
 import Course from './Course';
 import { getAccessToken } from '../userIdentity';
+import { withRouter } from 'react-router'
 
 class CourseList extends React.Component {
     constructor(props) {
@@ -10,32 +11,39 @@ class CourseList extends React.Component {
         this.state = {
             error: null,
             isLoaded: false,
-            courses: []
+            courses: [],
+            redirect: this.props.loggedInUser
         };
+
+        if (!this.redirect) {
+            this.props.history.push({ pathname: `/sign-in` });
+        }
     }
 
     componentDidMount() {
-        fetch('http://localhost:8080/api/courses', {
-            method: 'GET',
-            headers: new Headers({
-                'Authorization': `Bearer ${getAccessToken()}`
+        if (this.state.redirect) {
+            fetch('http://localhost:8080/api/courses', {
+                method: 'GET',
+                headers: new Headers({
+                    'Authorization': `Bearer ${getAccessToken()}`
+                })
             })
-        })
-        .then(res => res.json())
-        .then(
-            (result) => {
-                this.setState({
-                    isLoaded: true,
-                    courses: result
-                });
-            },
-            (error) => {
-                this.setState({
-                    isLoaded: true,
-                    error
-                });
-            }
-        )
+            .then(res => res.json())
+            .then(
+                (result) => {
+                    this.setState({
+                        isLoaded: true,
+                        courses: result
+                    });
+                },
+                (error) => {
+                    this.setState({
+                        isLoaded: true,
+                        error
+                    });
+                }
+            );
+        }
     }
 
     render() {
@@ -53,4 +61,4 @@ class CourseList extends React.Component {
     }
 }
 
-export default CourseList;
+export default withRouter(CourseList);

@@ -8,7 +8,7 @@ import SignUp from './SignUp';
 import { Container } from '@material-ui/core';
 import CourseList from './components/CourseList';
 import CourseForm from './components/CourseForm';
-import { authenticate, getUserId, clearAuth } from './userIdentity';
+import { getUserId, clearAuth } from './userIdentity';
 import { useState } from 'react';
 
 function App() {
@@ -32,7 +32,7 @@ function App() {
               <About />
             </Route>
             <Route exact path="/sign-in">
-              <SignIn loggedInUser={loggedInUser} handleSignIn={handleSignIn}/>
+              <SignIn handleSignIn={handleSignIn}/>
             </Route>
             <Route exact path="/sign-up">
               <SignUp />

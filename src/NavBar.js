@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import SignOut from './SignOut';
 
 function NavBar({ loggedInUser, handleSignOut }) {
-    console.log(loggedInUser)
     return (
         <div>
             <AppBar position="static">
@@ -13,6 +12,7 @@ function NavBar({ loggedInUser, handleSignOut }) {
                     </IconButton>
                     {!loggedInUser ? <MenuItem component={Link} to={'/sign-in'}>Sign In</MenuItem> : null}
                     {!loggedInUser ? <MenuItem component={Link} to={'/sign-up'}>Sign Up</MenuItem> : null}
+                    {!loggedInUser ? <MenuItem component={Link} to={'/courses'}>Courses</MenuItem> : null}
                     {loggedInUser ? <SignOut handleSignOut={handleSignOut} />: null}
                 </Toolbar>
             </AppBar>
