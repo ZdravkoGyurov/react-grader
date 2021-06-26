@@ -15,6 +15,7 @@ function NavBar({ loggedInUser, handleSignOut }) {
                     {!loggedInUser ? <MenuItem component={Link} to={'/courses'}>Courses</MenuItem> : null}
                     {loggedInUser ? <MenuItem component={Link} to={'/users'}>Users</MenuItem> : null}
                     {loggedInUser ? <MenuItem component={Link} to={'/my-requests'}>My Requests</MenuItem> : null}
+                    {loggedInUser ? <MenuItem component={Link} to={'/approve-requests'}>Approve Requests</MenuItem> : null}
                     {loggedInUser ? <SignOut handleSignOut={handleSignOut} />: null}
                 </Toolbar>
             </AppBar>

@@ -12,6 +12,7 @@ import { getUserId, clearAuth } from './userIdentity';
 import { useState } from 'react';
 import UserList from './components/UserList';
 import Requests from './components/Requests';
+import ApproveRequests from './components/ApproveRequests';
 
 function App() {
   const [loggedInUser, setLoggedInUser] = useState(null);
@@ -44,6 +45,9 @@ function App() {
             </Route>
             <Route exact path="/my-requests">
               <Requests loggedInUser={loggedInUser} />
+            </Route>
+            <Route exact path="/approve-requests">
+              <ApproveRequests loggedInUser={loggedInUser} />
             </Route>
             <Route exact path="/courses/create-course">
               <SubmitCourse loggedInUser={loggedInUser} />

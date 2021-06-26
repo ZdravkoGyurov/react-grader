@@ -3,7 +3,6 @@ import CourseRequestsList from "./CourseRequestsList"
 import PermissionsRequestsList from "./PermissionsRequestsList"
 
 const Requests = ({loggedInUser}) => {
-
     return (
         <Grid container spacing={2}>
             <Grid item xs={6}>
