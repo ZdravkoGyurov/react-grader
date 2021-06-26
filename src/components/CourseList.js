@@ -12,16 +12,16 @@ class CourseList extends React.Component {
             error: null,
             isLoaded: false,
             courses: [],
-            redirect: this.props.loggedInUser
+            redirect: !this.props.loggedInUser
         };
 
-        if (!this.redirect) {
+        if (this.redirect) {
             this.props.history.push({ pathname: `/sign-in` });
         }
     }
 
     componentDidMount() {
-        if (this.state.redirect) {
+        if (!this.state.redirect) {
             fetch('http://localhost:8080/api/courses', {
                 method: 'GET',
                 headers: new Headers({
@@ -54,7 +54,7 @@ class CourseList extends React.Component {
         } else {
             return (
                 <div className="Courses-wrapper">
-                    {this.state.courses.map(course => <Course course={course} key={course.id}/>)}
+                    {this.state.courses.map(course => <Course course={course} loggedInUser={this.props.loggedInUser} key={course.id}/>)}
                 </div>
             );
         }
