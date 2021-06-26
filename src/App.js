@@ -3,7 +3,6 @@ import NavBar from './components/NavBar';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { Route, Switch } from 'react-router-dom';
 import SignIn from './SignIn';
-import About from './About';
 import SignUp from './components/SignUp';
 import { Container } from '@material-ui/core';
 import CourseList from './components/CourseList';
@@ -11,6 +10,7 @@ import CourseForm from './components/CourseForm';
 import SubmitCourse from './components/SubmitCourse';
 import { getUserId, clearAuth } from './userIdentity';
 import { useState } from 'react';
+import UserList from './components/UserList';
 
 function App() {
   const [loggedInUser, setLoggedInUser] = useState(null);
@@ -37,6 +37,9 @@ function App() {
             </Route>
             <Route exact path="/courses">
               <CourseList loggedInUser={loggedInUser} />
+            </Route>
+            <Route exact path="/users">
+              <UserList loggedInUser={loggedInUser} />
             </Route>
             <Route exact path="/courses/create-course">
               <SubmitCourse loggedInUser={loggedInUser} />
