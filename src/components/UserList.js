@@ -1,7 +1,8 @@
+import { List } from "@material-ui/icons";
 import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { getAccessToken } from '../userIdentity';
-
+import User from "./User";
 
 const UserList = ({loggedInUser}) => {
     const [isLoaded, setIsLoaded] = useState(false)
@@ -14,25 +15,17 @@ const UserList = ({loggedInUser}) => {
             history.push('/sign-in')
         }
 
-        fetch('http://localhost:8080/api/users', {
-                method: 'GET',
-                headers: new Headers({
-                    'Authorization': `Bearer ${getAccessToken()}`
-                })
-            }
-        )
-        .then(res => res.json())
-        .then(
+        getUsers().then(
             (result) => {
-                setIsLoaded(true)
                 setUsers(result)
+                setIsLoaded(true)
             },
             (error) => {
-                setIsLoaded(true)
                 setError(error)
+                setIsLoaded(true)
             }
         )
-    }, [])
+    }, [history, loggedInUser])
 
 
     if (!isLoaded) {
@@ -42,8 +35,19 @@ const UserList = ({loggedInUser}) => {
         return <div>{ error }</div>
     }
     return (
-        <div>{ JSON.stringify(users) }</div>
+        <List>{users.map(user => <User key={user.id} user={user}/>)}</List>
     )
+}
+
+async function getUsers() {
+    const res = await fetch('http://localhost:8080/api/users', {
+            method: 'GET',
+            headers: new Headers({
+                'Authorization': `Bearer ${getAccessToken()}`
+            })
+        }
+    )
+    return await res.json()
 }
 
 export default UserList
