@@ -9,7 +9,7 @@ import CardMedia from '@material-ui/core/CardMedia';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { isAuthorized } from '../userIdentity';
 
 const useStyles = makeStyles({
     root: {
@@ -20,9 +20,15 @@ const useStyles = makeStyles({
     },
 });
 
-export default function Course({ course, ...rest }) {
+export default function Course({ course, loggedInUser, ...rest }) {
     const classes = useStyles();
+    const canEditCourse = isAuthorized('UPDATE_COURSE');
+    const canDeleteCourse = isAuthorized('DELETE_COURSE');
 
+    const handleEditCourse = () => {
+        
+    }
+    
     return (
         <Card className={classes.root}>
             <CardActionArea>
@@ -40,28 +46,33 @@ export default function Course({ course, ...rest }) {
                     </Typography>
                 </CardContent>
             </CardActionArea>
+
             <CardActions>
                 <Button size="small" color="primary">Learn More</Button>
-                <Link to="edit-course">
+                {canEditCourse ? (
+                    <Button
+                    variant="contained"
+                    color="primary"
+                    className={classes.button}
+                    startIcon={<EditIcon />}
+                    onClick={handleEditCourse}
+                    >
+                    Edit
+                    </Button>) : null
+                }
+                
+                {canDeleteCourse ? (
                     <Button
                         variant="contained"
                         color="secondary"
                         className={classes.button}
                         startIcon={<DeleteIcon />}
                     >
-                        Edit
-                    </Button>
-                </Link>
-
-                <Button
-                    variant="contained"
-                    color="primary"
-                    className={classes.button}
-                    startIcon={<EditIcon />}
-                >
                     Delete
-                </Button>
+                    </Button>) : null
+                }
             </CardActions>
+            
         </Card>
     );
 }
