@@ -1,4 +1,4 @@
-import { Button, List } from "@material-ui/core";
+import { Button, List, Typography } from "@material-ui/core";
 import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import send from "../api/api";
@@ -32,7 +32,7 @@ const PermissionsRequestsList = ({loggedInUser}) => {
         createRequest(isMounted, requests, setRequests, request, handleCloseDialog)
     }
 
-    const handleDeleteUser = (id) => {
+    const handleDeleteRequest = (id) => {
         deletePermissionsRequest(isMounted, requests, setRequests, id)
     }
 
@@ -44,6 +44,9 @@ const PermissionsRequestsList = ({loggedInUser}) => {
     }
     return (
         <div>
+            <Typography variant="h4">
+                Requests for permissions
+            </Typography>
             <Button
                 sx={{ pt: 3 }}
                 variant="contained"
@@ -53,7 +56,7 @@ const PermissionsRequestsList = ({loggedInUser}) => {
             >
                 Create
             </Button>
-            <List>{requests.map(r => <PermissionsRequest key={r.id} request={r} deleteRequest={handleDeleteUser}/>)}</List>
+            <List>{requests.map(r => <PermissionsRequest key={r.id} request={r} deleteRequest={handleDeleteRequest}/>)}</List>
             <CreatePermissionsRequestDialog open={createOpen} setOpen={setCreateOpen} createRequest={handleCreateRequest}/>
         </div>
     )

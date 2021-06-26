@@ -3,32 +3,32 @@ import { useFormik } from "formik";
 import * as yup from 'yup';
 
 const validationSchema = yup.object({
-    permissions: yup
-        .string('Enter permissions')
-        .required('Permissions are required'),
+    courseId: yup
+        .string('Enter course id')
+        .required('Course id is required'),
 });
 
-export default function CreatePermissionsRequestDialog({open, setOpen, createRequest}) {
+export default function CreateCourseRequestDialog({open, setOpen, createRequest}) {
     const formik = useFormik({
         initialValues: {
-            permissions: ''
+            courseId: ''
         },
         validationSchema: validationSchema,
         onSubmit: (values) => {
             const data = {
-                permissions: values.permissions.split(' ')
+                courseId: values.courseId
             }
             createRequest(data, () => {
                 setOpen(false)
-                formik.setFieldValue('permissions', '')
-                formik.touched.permissions = false
+                formik.setFieldValue('courseId', '')
+                formik.touched.courseId = false
             })
         },
     });
 
     const handleCloseDialog = () => {
-        formik.setFieldValue('permissions', '')
-        formik.touched.permissions = false
+        formik.setFieldValue('courseId', '')
+        formik.touched.courseId = false
         setOpen(false)
     };
 
@@ -40,20 +40,20 @@ export default function CreatePermissionsRequestDialog({open, setOpen, createReq
     return (
         <form>
             <Dialog open={open} onClose={handleCloseDialog} aria-labelledby="form-dialog-title">
-                <DialogTitle id="form-dialog-title">Create request for permissions</DialogTitle>
+                <DialogTitle id="form-dialog-title">Create request to join course</DialogTitle>
                 <DialogContent>
                     <TextField
                         variant="outlined"
                         margin="dense"
-                        id="permissions"
-                        label="Permissions"
+                        id="courseId"
+                        label="Course ID"
                         type="text"
-                        name="permissions"
+                        name="courseId"
                         fullWidth
-                        value={formik.values.permissions}
+                        value={formik.values.courseId}
                         onChange={formik.handleChange}
-                        error={formik.touched.permissions && Boolean(formik.errors.permissions)}
-                        helperText={formik.touched.permissions && formik.errors.permissions}
+                        error={formik.touched.courseId && Boolean(formik.errors.courseId)}
+                        helperText={formik.touched.courseId && formik.errors.courseId}
                     />
                 </DialogContent>
                 <DialogActions>

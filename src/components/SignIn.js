@@ -13,7 +13,7 @@ import { Link as RouteLink } from "react-router-dom";
 import * as yup from 'yup';
 import { useFormik } from 'formik';
 import { useHistory } from "react-router-dom";
-import { authenticate } from './userIdentity';
+import { authenticate } from '../userIdentity';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
