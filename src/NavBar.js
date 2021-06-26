@@ -13,6 +13,7 @@ function NavBar({ loggedInUser, handleSignOut }) {
                     {!loggedInUser ? <MenuItem component={Link} to={'/sign-in'}>Sign In</MenuItem> : null}
                     {!loggedInUser ? <MenuItem component={Link} to={'/sign-up'}>Sign Up</MenuItem> : null}
                     {!loggedInUser ? <MenuItem component={Link} to={'/courses'}>Courses</MenuItem> : null}
+                    {loggedInUser ? <MenuItem component={Link} to={'/users'}>Users</MenuItem> : null}
                     {loggedInUser ? <SignOut handleSignOut={handleSignOut} />: null}
                 </Toolbar>
             </AppBar>

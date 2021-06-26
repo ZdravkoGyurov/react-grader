@@ -9,6 +9,7 @@ import CourseList from './components/CourseList';
 import CourseForm from './components/CourseForm';
 import { getUserId, clearAuth } from './userIdentity';
 import { useState } from 'react';
+import UserList from './components/UserList';
 
 function App() {
   const [loggedInUser, setLoggedInUser] = useState(null);
@@ -35,6 +36,9 @@ function App() {
             </Route>
             <Route exact path="/courses">
               <CourseList loggedInUser={loggedInUser} />
+            </Route>
+            <Route exact path="/users">
+              <UserList loggedInUser={loggedInUser} />
             </Route>
             <Route exact path="/courses/create-course">
               <CourseForm loggedInUser={loggedInUser} />
