@@ -4,22 +4,16 @@ import { useHistory } from "react-router-dom";
 import send from "../api/api";
 import '../styles/CourseList.css';
 import Course from './Course';
-import CreateCourseDialog from './CreateCourseDialog';
-import { getAccessToken, isAuthorized } from '../userIdentity';
+import { getAccessToken } from '../userIdentity';
 import Typography from '@material-ui/core/Typography';
-import { Button } from '@material-ui/core';
-import AddIcon from '@material-ui/icons/Add';
 
 export default function CourseList({ loggedInUser }) {
     const [isLoaded, setIsLoaded] = useState(false);
     const [courses, setCourses] = useState([]);
     const [error, setError] = useState(null);
     const [isMounted, setIsMounted] = useState(false);
-    const [createOpen, setCreateOpen] = useState(false);
     let history = useHistory();
     
-    const canCreateCourse = isAuthorized('CREATE_COURSE');
-
     useEffect(() => {
         setIsMounted(true);
         if (!loggedInUser || (loggedInUser.permissions && loggedInUser.permissions.includes('READ_COURSES'))) {
@@ -29,14 +23,6 @@ export default function CourseList({ loggedInUser }) {
         getCourses(isMounted, setIsLoaded, setCourses, setError);
         return () => { setIsMounted(false) }
     }, [isMounted, history, loggedInUser]);
-
-    const handleOpenCreateDialog = () => {
-        setCreateOpen(true);
-    }
-
-    const handleCreateCourse = (course, handleCloseDialog) => {
-        createCourse(isMounted, courses, setCourses, course, handleCloseDialog);
-    }
 
     const handleEditCourse = (id, course, handleCloseDialog) => {
         editCourse(isMounted, courses, setCourses, id, course, handleCloseDialog);
@@ -59,17 +45,6 @@ export default function CourseList({ loggedInUser }) {
                 <Typography variant="h4" component="h2">
                     My courses
                 </Typography>
-                { canCreateCourse ? 
-                <Button
-                    sx={{ pt: 3 }}
-                    variant="contained"
-                    color="primary"
-                    startIcon={<AddIcon />}
-                    onClick={handleOpenCreateDialog}
-                >
-                    Create Course
-                </Button> : null }
-                <CreateCourseDialog open={createOpen} setOpen={setCreateOpen} createCourse={handleCreateCourse}/>
                 <div className="Courses-wrapper">
                     {courses.map(c => <Course key={c.id} loggedInUser={loggedInUser} course={c}
                         editCourse={handleEditCourse} deleteCourse={handleDeleteCourse}/>)}
@@ -98,28 +73,6 @@ function getCourses(isMounted, setIsLoaded, setCourses, setError) {
             setError(error);
             setIsLoaded(true);
         }
-    })
-}
-
-function createCourse(isMounted, courses, setCourses, course, handleCloseDialog) {
-    send({
-        url: `http://localhost:8080/api/courses`,
-        method: 'POST',
-        headers: new Headers({
-            'Authorization': `Bearer ${getAccessToken()}`,
-            'Content-Type': 'application/json'
-        }),
-        data: course,
-        expectedStatusCode: 200
-    }, (result) => {
-        if (isMounted) {
-            const newCourses = [...courses];
-            newCourses.push(result);
-            setCourses(newCourses);
-            handleCloseDialog();
-        }
-    }, (error) => {
-        alert(error);
     })
 }
 

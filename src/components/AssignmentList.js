@@ -21,7 +21,7 @@ export default function AssignmentList({ loggedInUser }) {
 
         getAssignments(isMounted, setIsLoaded, courseId, setAssignments, setError);
         return () => { setIsMounted(false); }
-    }, [isMounted, history, loggedInUser]);
+    }, [isMounted, history, loggedInUser, courseId]);
 
     const handleEditAssignment = (id, assignment, handleCloseDialog) => {
         editAssignment(isMounted, assignments, setAssignments, id, assignment, handleCloseDialog);
@@ -54,7 +54,7 @@ function getAssignments(isMounted, setIsLoaded, courseId, setAssignments, setErr
         expectedStatusCode: 200
     }, (result) => {
         if (isMounted) {
-            const courseAssignments = result.filter(a => a.courseId == courseId);
+            const courseAssignments = result.filter(a => a.courseId === courseId);
             setAssignments(courseAssignments);
             setIsLoaded(true);
         }

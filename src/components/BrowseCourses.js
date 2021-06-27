@@ -1,9 +1,11 @@
-import { Grid, Snackbar, TextField, Typography } from "@material-ui/core";
+import { Button, Grid, Snackbar, TextField, Typography } from "@material-ui/core";
 import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import send from "../api/api";
-import { getAccessToken } from "../userIdentity";
+import { getAccessToken, isAuthorized } from "../userIdentity";
 import BrowseCourse from "./BrowseCourse";
+import AddIcon from '@material-ui/icons/Add';
+import CreateCourseDialog from "./CreateCourseDialog";
 
 export default function BrowseCourses({loggedInUser}) {
     const [isLoaded, setIsLoaded] = useState(false);
@@ -11,7 +13,10 @@ export default function BrowseCourses({loggedInUser}) {
     const [error, setError] = useState(null);
     const [isMounted, setIsMounted] = useState(false);
     const [searchText, setSearchText] = useState('');
+    const [createOpen, setCreateOpen] = useState(false);
     let history = useHistory();
+
+    const canCreateCourse = isAuthorized('CREATE_COURSE');
 
     const [openSnackbar, setOpenSnackbar] = useState(false)
     const [snackbarMessage, setSnackbarMessage] = useState('')
@@ -28,6 +33,14 @@ export default function BrowseCourses({loggedInUser}) {
 
     const filterByName = (course) => {
         return course.name.toLowerCase().includes(searchText.toLowerCase())
+    }
+
+    const handleOpenCreateDialog = () => {
+        setCreateOpen(true);
+    }
+
+    const handleCreateCourse = (course, handleCloseDialog) => {
+        createCourse(isMounted, courses, setCourses, course, handleCloseDialog);
     }
 
     const handleSearch = (event) => {
@@ -50,6 +63,17 @@ export default function BrowseCourses({loggedInUser}) {
     return (
         <span>
             <Typography variant="h4" component="h2">Browse courses</Typography>
+            { canCreateCourse ? 
+                <Button
+                    sx={{ pt: 3 }}
+                    variant="contained"
+                    color="primary"
+                    startIcon={<AddIcon />}
+                    onClick={handleOpenCreateDialog}
+                >
+                    Create Course
+                </Button> : null }
+            <CreateCourseDialog open={createOpen} setOpen={setCreateOpen} createCourse={handleCreateCourse}/>
             <Grid container spacing={2}>
                     <TextField
                             variant="outlined"
@@ -67,6 +91,28 @@ export default function BrowseCourses({loggedInUser}) {
             <Snackbar open={openSnackbar} autoHideDuration={5000} message={snackbarMessage}/>
         </span>
     )
+}
+
+function createCourse(isMounted, courses, setCourses, course, handleCloseDialog) {
+    send({
+        url: `http://localhost:8080/api/courses`,
+        method: 'POST',
+        headers: new Headers({
+            'Authorization': `Bearer ${getAccessToken()}`,
+            'Content-Type': 'application/json'
+        }),
+        data: course,
+        expectedStatusCode: 200
+    }, (result) => {
+        if (isMounted) {
+            const newCourses = [...courses];
+            newCourses.push(result);
+            setCourses(newCourses);
+            handleCloseDialog();
+        }
+    }, (error) => {
+        alert(error);
+    })
 }
 
 function createRequest(isMounted, courseId, course, setOpenSnackbar, setSnackbarMessage) {
