@@ -13,6 +13,7 @@ import { useState } from 'react';
 import UserList from './components/UserList';
 import Requests from './components/Requests';
 import ApproveRequests from './components/ApproveRequests';
+import BrowseCourses from './components/BrowseCourses';
 
 function App() {
   const [loggedInUser, setLoggedInUser] = useState(null);
@@ -39,6 +40,9 @@ function App() {
             </Route>
             <Route exact path="/courses">
               <CourseList loggedInUser={loggedInUser} />
+            </Route>
+            <Route exact path="/browse-courses">
+              <BrowseCourses loggedInUser={loggedInUser} />
             </Route>
             <Route exact path="/users">
               <UserList loggedInUser={loggedInUser} />
