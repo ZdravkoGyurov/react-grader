@@ -10,6 +10,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import React from 'react';
 import { isAuthorized } from '../userIdentity';
+import { IconButton } from '@material-ui/core';
 
 const useStyles = makeStyles({
     root: {
@@ -27,6 +28,10 @@ export default function Course({ course, loggedInUser, ...rest }) {
 
     const handleEditCourse = () => {
         
+    }
+
+    const handleDeleteCourse = () => {
+
     }
     
     return (
@@ -50,27 +55,16 @@ export default function Course({ course, loggedInUser, ...rest }) {
             <CardActions>
                 <Button size="small" color="primary">Learn More</Button>
                 {canEditCourse ? (
-                    <Button
-                    variant="contained"
-                    color="primary"
-                    className={classes.button}
-                    startIcon={<EditIcon />}
-                    onClick={handleEditCourse}
-                    >
-                    Edit
-                    </Button>) : null
+                    <IconButton onClick={handleDeleteCourse}>
+                        <EditIcon></EditIcon>
+                    </IconButton>) : null
                 }
                 
                 {canDeleteCourse ? (
-                    <Button
-                        variant="contained"
-                        color="secondary"
-                        className={classes.button}
-                        startIcon={<DeleteIcon />}
-                    >
-                    Delete
-                    </Button>) : null
-                }
+                    <IconButton onClick={handleDeleteCourse}>
+                        <DeleteIcon></DeleteIcon>
+                    </IconButton>
+                ) : null}
             </CardActions>
             
         </Card>
