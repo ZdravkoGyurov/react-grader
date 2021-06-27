@@ -37,6 +37,10 @@ export default function CourseList({ loggedInUser }) {
         createCourse(isMounted, courses, setCourses, course, handleCloseDialog);
     }
 
+    const handleEditCourse = (id, course, handleCloseDialog) => {
+        editCourse(isMounted, courses, setCourses, id, course, handleCloseDialog);
+    }
+
     const handleDeleteCourse = (id) => {
         deleteCourse(isMounted, courses, setCourses, id);
     }
@@ -65,7 +69,7 @@ export default function CourseList({ loggedInUser }) {
                 </Button>
                 <CreateCourseDialog open={createOpen} setOpen={setCreateOpen} createCourse={handleCreateCourse}/>
                 <div className="Courses-wrapper">
-                    {courses.map(c => <Course key={c.id} course={c} deleteCourse={handleDeleteCourse}/>)}
+                    {courses.map(c => <Course key={c.id} course={c} editCourse={handleEditCourse} deleteCourse={handleDeleteCourse}/>)}
                 </div>
         </div>
     )
@@ -110,6 +114,27 @@ function createCourse(isMounted, courses, setCourses, course, handleCloseDialog)
             newCourses.push(result);
             setCourses(newCourses);
             handleCloseDialog();
+        }
+    }, (error) => {
+        alert(error);
+    })
+}
+
+function editCourse(isMounted, courses, setCourses, id, course, handleCloseDialog) {
+    send({
+        url: `http://localhost:8080/api/courses/${id}`,
+        method: 'PATCH',
+        headers: new Headers({
+            'Authorization': `Bearer ${getAccessToken()}`,
+            'Content-Type': 'application/json'
+        }),
+        data: course,
+        expectedStatusCode: 200
+    }, (result) => {
+        if (isMounted) {
+            const newCourses = [...courses];
+            setCourses(newCourses.map(c => c.id === id ? result : c));
+            handleCloseDialog()
         }
     }, (error) => {
         alert(error);
