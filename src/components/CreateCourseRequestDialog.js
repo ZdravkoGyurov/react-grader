@@ -1,40 +1,39 @@
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from "@material-ui/core";
-import { useFormik } from "formik";
-import * as yup from 'yup';
-
-const validationSchema = yup.object({
-    courseId: yup
-        .string('Enter course id')
-        .required('Course id is required'),
-});
+import { Button, Dialog, Select, DialogActions, DialogContent, DialogTitle, MenuItem, InputLabel } from "@material-ui/core";
+import { useEffect, useState } from "react";
+import send from "../api/api";
+import { getAccessToken } from "../userIdentity";
 
 export default function CreateCourseRequestDialog({open, setOpen, createRequest}) {
-    const formik = useFormik({
-        initialValues: {
-            courseId: ''
-        },
-        validationSchema: validationSchema,
-        onSubmit: (values) => {
-            const data = {
-                courseId: values.courseId
-            }
-            createRequest(data, () => {
-                setOpen(false)
-                formik.setFieldValue('courseId', '')
-                formik.touched.courseId = false
-            })
-        },
-    });
+    const [isMounted, setIsMounted] = useState('')
+    const [isLoaded, setIsLoaded] = useState('')
+    const [courses, setCourses] = useState([])
+    const [error, setError] = useState('')
+
+    const [courseId, setCourseId] = useState('')
+
+    useEffect(() => {
+        setIsMounted(true)
+
+        getCourses(isMounted, setIsLoaded, setCourses, setError)
+        return () => { setIsMounted(false) }
+    }, [isMounted])
+
+    const handleSelect = (event) => {
+        setCourseId(event.target.value)
+    }
 
     const handleCloseDialog = () => {
-        formik.setFieldValue('courseId', '')
-        formik.touched.courseId = false
         setOpen(false)
     };
 
     const handleSubmitEditForm = (event) => {
         event.preventDefault()
-        formik.handleSubmit()
+        const data = {
+            courseId: courseId
+        }
+        createRequest(data, () => {
+            setOpen(false)
+        })
     }
 
     return (
@@ -42,19 +41,21 @@ export default function CreateCourseRequestDialog({open, setOpen, createRequest}
             <Dialog open={open} onClose={handleCloseDialog} aria-labelledby="form-dialog-title">
                 <DialogTitle id="form-dialog-title">Create request to join course</DialogTitle>
                 <DialogContent>
-                    <TextField
-                        variant="outlined"
-                        margin="dense"
-                        id="courseId"
-                        label="Course ID"
-                        type="text"
-                        name="courseId"
-                        fullWidth
-                        value={formik.values.courseId}
-                        onChange={formik.handleChange}
-                        error={formik.touched.courseId && Boolean(formik.errors.courseId)}
-                        helperText={formik.touched.courseId && formik.errors.courseId}
-                    />
+                    {isLoaded ? (error ? alert(error) : 
+                    <span>
+                        <InputLabel id="course">Course</InputLabel>
+                        <Select
+                            id="course"
+                            labelId="course"
+                            value={courseId}
+                            onChange={handleSelect}
+                            name="course"
+                            fullWidth
+                            >
+                                {courses.map(c => courseMenuItem(c))}
+                        </Select>
+                    </span>)
+                     : <div>loading</div>}
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleCloseDialog}>Cancel</Button>
@@ -63,4 +64,32 @@ export default function CreateCourseRequestDialog({open, setOpen, createRequest}
             </Dialog>
         </form>
     )
+}
+
+function courseMenuItem(c) {
+    return (
+        <MenuItem key={c.id} value={c.id}>{c.name}</MenuItem>
+    )
+}
+
+function getCourses(isMounted, setIsLoaded, setCourses, setError) {
+    send({
+        url: 'http://localhost:8080/api/courses',
+        method: 'GET',
+        headers: new Headers({
+            'Authorization': `Bearer ${getAccessToken()}`
+        }),
+        data: null,
+        expectedStatusCode: 200
+    }, (result) => {
+        if (isMounted) {
+            setCourses(result)
+            setIsLoaded(true)
+        }
+    }, (error) => {
+        if (isMounted) {
+            setError(error)
+            setIsLoaded(true)
+        }
+    })
 }
