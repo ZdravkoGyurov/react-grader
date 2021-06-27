@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -15,7 +15,7 @@ import send from '../api/api';
 import { useFormik } from 'formik';
 
 const validationSchema = yup.object({
-  fullName: yup
+  fullname: yup
     .string('Enter full name')
     .required('Full name is required'),
   username: yup
@@ -50,38 +50,40 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function SignUp({loggedInUser}) {
-  const [isLoaded, setIsLoaded] = useState(false)
-  const [error, setError] = useState(null)
   const [isMounted, setIsMounted] = useState(false)
   const classes = useStyles();
   let history = useHistory()
 
+  useEffect(() => {
+    setIsMounted(true)
+
+    return () => { setIsMounted(false) }
+}, [isMounted, history, loggedInUser])
+
   const formik = useFormik({
     initialValues: {
-        fullName: '',
+        fullname: '',
         username: '',
         githubUsername: '',
         password: ''
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      alert(1)
-      console.log(values)
-      // send({
-      //   url: `http://localhost:8080/api/users`,
-      //   method: 'POST',
-      //   headers: new Headers({
-      //       'Content-Type': 'application/json'
-      //   }),
-      //   data: values,
-      //   expectedStatusCode: 200
-      // }, (result) => {
-      //   if (isMounted) {
-      //     history.push('/sign-in')
-      //   }
-      // }, (error) => {
-      //     alert(error)
-      // })
+      send({
+        url: `http://localhost:8080/api/users`,
+        method: 'POST',
+        headers: new Headers({
+            'Content-Type': 'application/json'
+        }),
+        data: values,
+        expectedStatusCode: 200
+      }, (result) => {
+        if (isMounted) {
+          history.push('/sign-in')
+        }
+      }, (error) => {
+          alert(error)
+      })
     },
   });
 
@@ -102,13 +104,13 @@ export default function SignUp({loggedInUser}) {
                 variant="outlined"
                 required
                 fullWidth
-                id="fullName"
+                id="fullname"
                 label="Full name"
-                name="fullName"
-                value={formik.values.fullName}
+                name="fullname"
+                value={formik.values.fullname}
                 onChange={formik.handleChange}
-                error={formik.touched.fullName && Boolean(formik.errors.fullName)}
-                helperText={formik.touched.fullName && formik.errors.fullName}
+                error={formik.touched.fullname && Boolean(formik.errors.fullname)}
+                helperText={formik.touched.fullname && formik.errors.fullname}
               />
             </Grid>
             <Grid item xs={12}>
