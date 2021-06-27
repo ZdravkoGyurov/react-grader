@@ -15,6 +15,8 @@ const CourseRequestsList = ({loggedInUser}) => {
     const [createOpen, setCreateOpen] = useState(false)
     let history = useHistory()
 
+    const [courses, setCourses] = useState([])
+
     useEffect(() => {
         setIsMounted(true)
         if (!loggedInUser || (loggedInUser.permissions && loggedInUser.permissions.includes('READ_COURSESREQUESTS'))) {
@@ -26,7 +28,7 @@ const CourseRequestsList = ({loggedInUser}) => {
     }, [isMounted, history, loggedInUser])
 
     const handleOpenCreateDialog = () => {
-        setCreateOpen(true)
+        getCourses(isMounted, setCourses, setCreateOpen)
     }
     const handleCreateRequest = (request, handleCloseDialog) => {
         createRequest(isMounted, requests, setRequests, request, handleCloseDialog)
@@ -57,9 +59,31 @@ const CourseRequestsList = ({loggedInUser}) => {
                 Create
             </Button>
             <List>{requests.map(r => <CourseRequest key={r.id} request={r} deleteRequest={handleDeleteRequest}/>)}</List>
-            <CreateCourseRequestDialog open={createOpen} setOpen={setCreateOpen} createRequest={handleCreateRequest}/>
+            <CreateCourseRequestDialog open={createOpen} setOpen={setCreateOpen} courses={courses} createRequest={handleCreateRequest}/>
         </div>
     )
+}
+
+
+function getCourses(isMounted, setCourses, setCreateOpen) {
+    send({
+        url: 'http://localhost:8080/api/courses',
+        method: 'GET',
+        headers: new Headers({
+            'Authorization': `Bearer ${getAccessToken()}`
+        }),
+        data: null,
+        expectedStatusCode: 200
+    }, (result) => {
+        if (isMounted) {
+            setCourses(result)
+            setCreateOpen(true)
+        }
+    }, (error) => {
+        if (isMounted) {
+            alert(error)
+        }
+    })
 }
 
 function createRequest(isMounted, requests, setRequests, request, handleCloseDialog) {
