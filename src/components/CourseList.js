@@ -7,7 +7,6 @@ import Course from './Course';
 import CreateCourseDialog from './CreateCourseDialog';
 import { getAccessToken } from '../userIdentity';
 import Typography from '@material-ui/core/Typography';
-import ConfirmationDialog from "./ConfirmationDialog";
 import { Button } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 
@@ -69,7 +68,8 @@ export default function CourseList({ loggedInUser }) {
                 </Button>
                 <CreateCourseDialog open={createOpen} setOpen={setCreateOpen} createCourse={handleCreateCourse}/>
                 <div className="Courses-wrapper">
-                    {courses.map(c => <Course key={c.id} course={c} editCourse={handleEditCourse} deleteCourse={handleDeleteCourse}/>)}
+                    {courses.map(c => <Course key={c.id} loggedInUser={loggedInUser} course={c}
+                        editCourse={handleEditCourse} deleteCourse={handleDeleteCourse}/>)}
                 </div>
         </div>
     )

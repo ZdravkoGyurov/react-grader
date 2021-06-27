@@ -6,13 +6,13 @@ import SignIn from './components/SignIn';
 import SignUp from './components/SignUp';
 import { Container } from '@material-ui/core';
 import CourseList from './components/CourseList';
-import CourseForm from './components/CourseForm';
 import SubmitCourse from './components/SubmitCourse';
 import { getUserId, clearAuth } from './userIdentity';
 import { useState } from 'react';
 import UserList from './components/UserList';
 import Requests from './components/Requests';
 import ApproveRequests from './components/ApproveRequests';
+import AssignmentList from './components/AssignmentList';
 
 function App() {
   const [loggedInUser, setLoggedInUser] = useState(null);
@@ -51,6 +51,9 @@ function App() {
             </Route>
             <Route exact path="/courses/create-course">
               <SubmitCourse loggedInUser={loggedInUser} />
+            </Route>
+            <Route exact path="/courses/:courseId">
+              <AssignmentList loggedInUser={loggedInUser} />
             </Route>
             <Route path="/">
               <div>Home</div>

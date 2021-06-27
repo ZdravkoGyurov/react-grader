@@ -59,7 +59,7 @@ export default function EditUserDialog({open, setOpen, editUser, user}) {
                         fullWidth
                         value={formik.values.fullname}
                         onChange={formik.handleChange}
-                        error={formik.touched.fullname && Boolean(formik.errors.nafullnameme)}
+                        error={formik.touched.fullname && Boolean(formik.errors.fullname)}
                         helperText={formik.touched.fullname && formik.errors.fullname}
                     />
                     <TextField

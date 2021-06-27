@@ -1,4 +1,3 @@
-import Button from '@material-ui/core/Button';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import Card from '@material-ui/core/Card';
@@ -13,6 +12,7 @@ import { isAuthorized } from '../userIdentity';
 import { IconButton } from '@material-ui/core';
 import ConfirmationDialog from "./ConfirmationDialog";
 import EditCourseDialog from "./EditCourseDialog";
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles({
     root: {
@@ -23,9 +23,10 @@ const useStyles = makeStyles({
     },
 });
 
-export default function Course({ course, editCourse, deleteCourse }) {
+export default function Course({ loggedInUser, course, editCourse, deleteCourse }) {
     const [open, setOpen] = useState(false);
     const [confirmationOpen, setConfirmationOpen] = useState(false);
+    let history = useHistory();
 
     const classes = useStyles();
     const canEditCourse = isAuthorized('UPDATE_COURSE');
@@ -42,11 +43,13 @@ export default function Course({ course, editCourse, deleteCourse }) {
     const handleSubmitDelete = () => {
         deleteCourse(course.id);
     }
+
+    // return <AssignmentList loggedInUser={loggedInUser} courseId={course.id} ></AssignmentList>
     
     return (
         <div>
             <Card className={classes.root}>
-                <CardActionArea>
+                <CardActionArea onClick={() => history.push(`/courses/${course.id}`)}>
                     <CardMedia
                         className={classes.media}
                         image="course_background.jpg"
@@ -63,7 +66,6 @@ export default function Course({ course, editCourse, deleteCourse }) {
                 </CardActionArea>
 
                 <CardActions>
-                    <Button size="small" color="primary">Learn More</Button>
                     {canEditCourse ? (
                         <IconButton onClick={handleEditCourse}>
                             <EditIcon></EditIcon>
