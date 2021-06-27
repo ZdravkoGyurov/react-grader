@@ -51,6 +51,14 @@ export default function BrowseCourses({loggedInUser}) {
         const course = courses.filter(c => c.id === courseId)[0]
         createRequest(isMounted, courseId, course, setOpenSnackbar, setSnackbarMessage)
     }
+
+    const handleEditCourse = (id, course, handleCloseDialog) => {
+        editCourse(isMounted, courses, setCourses, id, course, handleCloseDialog);
+    }
+
+    const handleDeleteCourse = (id) => {
+        deleteCourse(isMounted, courses, setCourses, id);
+    }
     
     if (!isLoaded) {
         return <div>Loading...</div>;
@@ -86,7 +94,7 @@ export default function BrowseCourses({loggedInUser}) {
                             value={searchText}
                             onChange={handleSearch}
                     />
-                    {courses.filter(c => filterByName(c)).map(c => <BrowseCourse key={c.id} course={c} createRequest={handleCreateRequest}/>)}
+                    {courses.filter(c => filterByName(c)).map(c => <BrowseCourse key={c.id} course={c} createRequest={handleCreateRequest} editCourse={handleEditCourse} deleteCourse={handleDeleteCourse}/>)}
             </Grid>
             <Snackbar open={openSnackbar} autoHideDuration={5000} message={snackbarMessage}/>
         </span>
@@ -109,6 +117,47 @@ function createCourse(isMounted, courses, setCourses, course, handleCloseDialog)
             newCourses.push(result);
             setCourses(newCourses);
             handleCloseDialog();
+        }
+    }, (error) => {
+        alert(error);
+    })
+}
+
+
+function editCourse(isMounted, courses, setCourses, id, course, handleCloseDialog) {
+    send({
+        url: `http://localhost:8080/api/courses/${id}`,
+        method: 'PATCH',
+        headers: new Headers({
+            'Authorization': `Bearer ${getAccessToken()}`,
+            'Content-Type': 'application/json'
+        }),
+        data: course,
+        expectedStatusCode: 200
+    }, (result) => {
+        if (isMounted) {
+            const newCourses = [...courses];
+            setCourses(newCourses.map(c => c.id === id ? result : c));
+            handleCloseDialog()
+        }
+    }, (error) => {
+        alert(error);
+    })
+}
+
+function deleteCourse(isMounted, courses, setCourses, id) {
+    send({
+        url: `http://localhost:8080/api/courses/${id}`,
+        method: 'DELETE',
+        headers: new Headers({
+            'Authorization': `Bearer ${getAccessToken()}`
+        }),
+        data: null,
+        expectedStatusCode: 204
+    }, (result) => {
+        if (isMounted) {
+            const newCourses = [...courses];
+            setCourses(newCourses.filter(c => c.id !== id));
         }
     }, (error) => {
         alert(error);
