@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -9,7 +9,25 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import { Link as RouteLink } from "react-router-dom";
+import * as yup from 'yup';
+import { Link as RouteLink, useHistory } from "react-router-dom";
+import send from '../api/api';
+import { useFormik } from 'formik';
+
+const validationSchema = yup.object({
+  fullName: yup
+    .string('Enter full name')
+    .required('Full name is required'),
+  username: yup
+    .string('Enter your username')
+    .required('Username is required'),
+  githubUsername: yup
+    .string('Enter your GitHub username')
+    .required('GitHub username is required'),
+  password: yup
+    .string('Enter your password')
+    .required('Password is required')
+});
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -31,8 +49,41 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SignUp() {
+export default function SignUp({loggedInUser}) {
+  const [isLoaded, setIsLoaded] = useState(false)
+  const [error, setError] = useState(null)
+  const [isMounted, setIsMounted] = useState(false)
   const classes = useStyles();
+  let history = useHistory()
+
+  const formik = useFormik({
+    initialValues: {
+        fullName: '',
+        username: '',
+        githubUsername: '',
+        password: ''
+    },
+    validationSchema: validationSchema,
+    onSubmit: (values) => {
+      alert(1)
+      console.log(values)
+      // send({
+      //   url: `http://localhost:8080/api/users`,
+      //   method: 'POST',
+      //   headers: new Headers({
+      //       'Content-Type': 'application/json'
+      //   }),
+      //   data: values,
+      //   expectedStatusCode: 200
+      // }, (result) => {
+      //   if (isMounted) {
+      //     history.push('/sign-in')
+      //   }
+      // }, (error) => {
+      //     alert(error)
+      // })
+    },
+  });
 
   return (
     <Container component="main" maxWidth="xs">
@@ -44,29 +95,16 @@ export default function SignUp() {
         <Typography component="h1" variant="h5">
           Sign up
         </Typography>
-        <form className={classes.form} noValidate>
+        <form className={classes.form} onSubmit={formik.handleSubmit}>
           <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                autoComplete="fname"
-                name="firstName"
-                variant="outlined"
-                required
-                fullWidth
-                id="firstName"
-                label="First Name"
-                autoFocus
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12}>
               <TextField
                 variant="outlined"
                 required
                 fullWidth
-                id="lastName"
-                label="Last Name"
-                name="lastName"
-                autoComplete="lname"
+                id="fullName"
+                label="Full name"
+                name="fullName"
               />
             </Grid>
             <Grid item xs={12}>
@@ -74,10 +112,19 @@ export default function SignUp() {
                 variant="outlined"
                 required
                 fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
-                autoComplete="email"
+                id="username"
+                label="Username"
+                name="username"
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                variant="outlined"
+                required
+                fullWidth
+                id="githubUsername"
+                label="GitHub username"
+                name="githubUsername"
               />
             </Grid>
             <Grid item xs={12}>
