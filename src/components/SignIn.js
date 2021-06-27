@@ -14,6 +14,7 @@ import * as yup from 'yup';
 import { useFormik } from 'formik';
 import { useHistory } from "react-router-dom";
 import { authenticate } from '../userIdentity';
+import send from "../api/api";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -57,23 +58,21 @@ export default function SignIn({ handleSignIn }) {
     onSubmit: (values) => {
         const token = btoa(`${values.username}:${values.password}`);
 
-        fetch('http://localhost:8080/api/login', {
-            method: 'GET',
-            headers: new Headers({
-                'Authorization': `Basic ${token}`
-            }),
-          })
-          .then(res => res.json())
-          .then(
-            (result) => {
-              authenticate(result);
-                handleSignIn();
-                history.push("/courses");
-            },
-            (error) => {
-                console.log(error);
-            }
-          );
+        send({
+          url: 'http://localhost:8080/api/login',
+          method: 'GET',
+          headers: new Headers({
+              'Authorization': `Basic ${token}`
+          }),
+          data: null,
+          expectedStatusCode: 200
+      }, (result) => {
+          authenticate(result);
+          handleSignIn();
+          history.push("/courses");
+      }, (error) => {
+          alert(error)
+      });
     },
   });
 
