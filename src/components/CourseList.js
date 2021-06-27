@@ -5,7 +5,7 @@ import send from "../api/api";
 import '../styles/CourseList.css';
 import Course from './Course';
 import CreateCourseDialog from './CreateCourseDialog';
-import { getAccessToken } from '../userIdentity';
+import { getAccessToken, isAuthorized } from '../userIdentity';
 import Typography from '@material-ui/core/Typography';
 import { Button } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
@@ -17,6 +17,8 @@ export default function CourseList({ loggedInUser }) {
     const [isMounted, setIsMounted] = useState(false);
     const [createOpen, setCreateOpen] = useState(false);
     let history = useHistory();
+    
+    const canCreateCourse = isAuthorized('CREATE_COURSE');
 
     useEffect(() => {
         setIsMounted(true);
@@ -57,6 +59,7 @@ export default function CourseList({ loggedInUser }) {
                 <Typography variant="h4" component="h2">
                     My courses
                 </Typography>
+                { canCreateCourse ? 
                 <Button
                     sx={{ pt: 3 }}
                     variant="contained"
@@ -64,8 +67,8 @@ export default function CourseList({ loggedInUser }) {
                     startIcon={<AddIcon />}
                     onClick={handleOpenCreateDialog}
                 >
-                Create Course
-                </Button>
+                    Create Course
+                </Button> : null }
                 <CreateCourseDialog open={createOpen} setOpen={setCreateOpen} createCourse={handleCreateCourse}/>
                 <div className="Courses-wrapper">
                     {courses.map(c => <Course key={c.id} loggedInUser={loggedInUser} course={c}
