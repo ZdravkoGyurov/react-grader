@@ -105,6 +105,10 @@ export default function SignUp({loggedInUser}) {
                 id="fullName"
                 label="Full name"
                 name="fullName"
+                value={formik.values.fullName}
+                onChange={formik.handleChange}
+                error={formik.touched.fullName && Boolean(formik.errors.fullName)}
+                helperText={formik.touched.fullName && formik.errors.fullName}
               />
             </Grid>
             <Grid item xs={12}>
@@ -115,6 +119,10 @@ export default function SignUp({loggedInUser}) {
                 id="username"
                 label="Username"
                 name="username"
+                value={formik.values.username}
+                onChange={formik.handleChange}
+                error={formik.touched.username && Boolean(formik.errors.username)}
+                helperText={formik.touched.username && formik.errors.username}
               />
             </Grid>
             <Grid item xs={12}>
@@ -125,6 +133,10 @@ export default function SignUp({loggedInUser}) {
                 id="githubUsername"
                 label="GitHub username"
                 name="githubUsername"
+                value={formik.values.githubUsername}
+                onChange={formik.handleChange}
+                error={formik.touched.githubUsername && Boolean(formik.errors.githubUsername)}
+                helperText={formik.touched.githubUsername && formik.errors.githubUsername}
               />
             </Grid>
             <Grid item xs={12}>
@@ -137,6 +149,10 @@ export default function SignUp({loggedInUser}) {
                 type="password"
                 id="password"
                 autoComplete="current-password"
+                value={formik.values.password}
+                onChange={formik.handleChange}
+                error={formik.touched.password && Boolean(formik.errors.password)}
+                helperText={formik.touched.password && formik.errors.password}
               />
             </Grid>
           </Grid>
