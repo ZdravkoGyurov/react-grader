@@ -50,6 +50,8 @@ export default function CreatePermissionsRequestDialog({open, setOpen, createReq
                         type="text"
                         name="permissions"
                         fullWidth
+                        multiline
+                        rows={4}
                         value={formik.values.permissions}
                         onChange={formik.handleChange}
                         error={formik.touched.permissions && Boolean(formik.errors.permissions)}
