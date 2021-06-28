@@ -1,6 +1,6 @@
-import { List } from "@material-ui/core";
+import { List, Typography } from "@material-ui/core";
 import { useEffect, useState } from "react";
-import { useHistory, useParams } from "react-router-dom";
+import { useHistory, useLocation, useParams } from "react-router-dom";
 import send from "../api/api";
 import { getAccessToken, isAuthorized } from '../userIdentity';
 import Assignment from "./Assignment";
@@ -10,6 +10,7 @@ export default function AssignmentList({ loggedInUser }) {
     const [assignments, setAssignments] = useState([]);
     const [error, setError] = useState(null);
     const [isMounted, setIsMounted] = useState(false);
+    let location = useLocation()
     let history = useHistory()
     const {courseId} = useParams();
 
@@ -38,8 +39,15 @@ export default function AssignmentList({ loggedInUser }) {
         return <div>{ error }</div>
     }
     return (
-        <List>{assignments.map(a => <Assignment key={a.id} assignment={a} 
-            editAssignment={handleEditAssignment} deleteAssignment={handleDeleteAssignment}/>)}</List>
+        <div>
+            <Typography variant="h4" component="h2">{location.state.course.name}</Typography>
+            <Typography variant="h5" component="h2">{location.state.course.description}</Typography>
+            <Typography>
+                Assignments
+            </Typography>
+            <List>{assignments.map(a => <Assignment key={a.id} assignment={a} 
+                editAssignment={handleEditAssignment} deleteAssignment={handleDeleteAssignment}/>)}</List>
+        </div>
     )
 }
 

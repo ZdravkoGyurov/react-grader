@@ -1,4 +1,4 @@
-import { List } from "@material-ui/core";
+import { List, Typography } from "@material-ui/core";
 import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import send from "../api/api";
@@ -37,7 +37,10 @@ const UserList = ({loggedInUser}) => {
         return <div>{ error }</div>
     }
     return (
-        <List>{users.map(user => <User key={user.id} user={user} editUser={handleEditUser} deleteUser={handleDeleteUser}/>)}</List>
+        <div>
+            <Typography variant="h4" component="h2">Users</Typography>
+            <List>{users.map(user => <User key={user.id} user={user} editUser={handleEditUser} deleteUser={handleDeleteUser}/>)}</List>
+        </div>
     )
 }
 

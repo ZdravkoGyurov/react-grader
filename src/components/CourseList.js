@@ -34,9 +34,7 @@ export default function CourseList({ loggedInUser }) {
 
     return (
         <div className="courses">
-                <Typography variant="h4" component="h2">
-                    My courses
-                </Typography>
+                <Typography variant="h4" component="h2">My courses</Typography>
                 <div className="Courses-wrapper">
                     {courses.map(c => <Course key={c.id} loggedInUser={loggedInUser} course={c}/>)}
                 </div>
