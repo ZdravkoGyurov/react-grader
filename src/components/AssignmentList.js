@@ -10,17 +10,21 @@ import TableBody from '@material-ui/core/TableBody';
 import { TableRow } from "@material-ui/core";
 import TableCell from '@material-ui/core/TableCell';
 import Typography from '@material-ui/core/Typography';
-import { List } from "@material-ui/core";
+import CreateAssignmentDialog from "./CreateAssignmentDialog";
+import { Button } from "@material-ui/core";
+import AddIcon from '@material-ui/icons/Add';
 
 export default function AssignmentList({ loggedInUser }) {
     const [isLoaded, setIsLoaded] = useState(false);
     const [assignments, setAssignments] = useState([]);
     const [error, setError] = useState(null);
     const [isMounted, setIsMounted] = useState(false);
+    const [createOpen, setCreateOpen] = useState(false);
     let location = useLocation()
     let history = useHistory()
     const {courseId} = useParams();
     const course = location.state.course
+    const canCreateAssignment = isAuthorized('CREATE_ASSIGNMENT');
 
     useEffect(() => {
         setIsMounted(true);
@@ -31,6 +35,14 @@ export default function AssignmentList({ loggedInUser }) {
         getAssignments(isMounted, setIsLoaded, courseId, setAssignments, setError);
         return () => { setIsMounted(false); }
     }, [isMounted, history, loggedInUser, courseId]);
+
+    const handleCreateAssignment = (assignment, handleCloseDialog) => {
+        createAssignment(isMounted, assignments, setAssignments, assignment, handleCloseDialog);
+    }
+
+    const handleOpenCreateDialog = () => {
+        setCreateOpen(true);
+    }
 
     const handleEditAssignment = (id, assignment, handleCloseDialog) => {
         editAssignment(isMounted, assignments, setAssignments, id, assignment, handleCloseDialog);
@@ -53,6 +65,17 @@ export default function AssignmentList({ loggedInUser }) {
             <Typography>
                 Assignments
             </Typography>
+            { canCreateAssignment ? 
+                <Button
+                    sx={{ pt: 3 }}
+                    variant="contained"
+                    color="primary"
+                    startIcon={<AddIcon />}
+                    onClick={handleOpenCreateDialog}
+                >
+                    Create Assignment
+                </Button> : null }
+            <CreateAssignmentDialog open={createOpen} setOpen={setCreateOpen} createAssignment={handleCreateAssignment} courseId={courseId}/>
             <TableContainer>
                 <Table aria-label="simple table">
                     <TableHead>
@@ -93,6 +116,28 @@ function getAssignments(isMounted, setIsLoaded, courseId, setAssignments, setErr
             setError(error);
             setIsLoaded(true);
         }
+    })
+}
+
+function createAssignment(isMounted, assignments, setAssignments, assignment, handleCloseDialog) {
+    send({
+        url: `http://localhost:8080/api/assignments`,
+        method: 'POST',
+        headers: new Headers({
+            'Authorization': `Bearer ${getAccessToken()}`,
+            'Content-Type': 'application/json'
+        }),
+        data: assignment,
+        expectedStatusCode: 200
+    }, (result) => {
+        if (isMounted) {
+            const newAssignments = [...assignments];
+            newAssignments.push(result);
+            setAssignments(newAssignments);
+            handleCloseDialog();
+        }
+    }, (error) => {
+        alert(error);
     })
 }
 
