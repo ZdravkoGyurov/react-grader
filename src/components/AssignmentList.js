@@ -9,6 +9,7 @@ import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import { TableRow } from "@material-ui/core";
 import TableCell from '@material-ui/core/TableCell';
+import Typography from '@material-ui/core/Typography';
 
 export default function AssignmentList({ loggedInUser }) {
     const [isLoaded, setIsLoaded] = useState(false);
@@ -37,6 +38,10 @@ export default function AssignmentList({ loggedInUser }) {
         deleteAssignment(isMounted, assignments, setAssignments, id);
     }
 
+    const routeToAssignment = (a) => { 
+        history.push(`/courses/${location.state.course.id}/${a.id}`, { course: location.state.course, assignment: a}) // , { course: location.state.course, assignment: a}
+    }
+
     if (!isLoaded) {
         return <div>Loading...</div>
     }
@@ -45,6 +50,11 @@ export default function AssignmentList({ loggedInUser }) {
     }
     return (
         <div>
+            <Typography variant="h4" component="h2">{location.state.course.name}</Typography>
+            <Typography variant="h5" component="h2">{location.state.course.description}</Typography>
+            <Typography>
+                Assignments
+            </Typography>
             <TableContainer>
                 <Table aria-label="simple table">
                     <TableHead>
@@ -57,8 +67,8 @@ export default function AssignmentList({ loggedInUser }) {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                    {assignments.map(a => <Assignment key={a.id} assignment={a} editAssignment={handleEditAssignment} 
-                        deleteAssignment={handleDeleteAssignment}/>)}
+                    {assignments.map(a => <div key={a.id} onClick={() => {routeToAssignment(a)}}><Assignment
+                key={a.id} assignment={a} editAssignment={handleEditAssignment} deleteAssignment={handleDeleteAssignment}/></div>)}
                     </TableBody>
                 </Table>
             </TableContainer>

@@ -1,16 +1,19 @@
 import { List, Typography } from "@material-ui/core";
 import { useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import send from "../api/api";
 import { getAccessToken, isAuthorized } from '../userIdentity';
 import AssignmentSubmission from "./AssignmentSubmission";
 
-const AssignmentSubmissionList = ({loggedInUser, assignmentId}) => {
+const AssignmentSubmissionList = ({loggedInUser}) => {
     const [isLoaded, setIsLoaded] = useState(false);
     const [assignmentSubmissions, setAssignmentSubmissions] = useState([]);
     const [error, setError] = useState(null);
     const [isMounted, setIsMounted] = useState(false);
     let history = useHistory();
+    let location = useLocation()
+    const course = location.state.course
+    const assignment = location.state.assignment
     
     useEffect(() => {
         setIsMounted(true);
@@ -18,7 +21,7 @@ const AssignmentSubmissionList = ({loggedInUser, assignmentId}) => {
             history.push('/sign-in');
         }
 
-        getAssignmentSubmissions(isMounted, setIsLoaded, assignmentId, setAssignmentSubmissions, setError);
+        getAssignmentSubmissions(isMounted, setIsLoaded, assignment.id, setAssignmentSubmissions, setError);
         return () => { setIsMounted(false); }
     }, [isMounted, history, loggedInUser]);
 
@@ -33,19 +36,19 @@ const AssignmentSubmissionList = ({loggedInUser, assignmentId}) => {
         <Typography variant="h4" component="h2">
         Submissions
         </Typography>
-        <List>{submissions.map(s => <AssignmentSubmission key={s.id} submission={s} />)}</List>
+        <List>{assignmentSubmissions.map(s => <AssignmentSubmission key={s.id} submission={s} />)}</List>
         </div>
     )
 }
 
 function getAssignmentSubmissions(isMounted, setIsLoaded, assignmentId, setAssignmentSubmissions, setError) {
     send({
-        url: `http://localhost:8080/api/submissions/${assignmentId}`,
+        url: `http://localhost:8080/api/submissions`,
         method: 'GET',
         headers: new Headers({
             'Authorization': `Bearer ${getAccessToken()}`
         }),
-        data: null,
+        data: {assignmentId: assignmentId},
         expectedStatusCode: 200
     }, (result) => {
         if (isMounted) {
