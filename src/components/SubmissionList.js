@@ -33,7 +33,12 @@ const SubmissionList = ({loggedInUser}) => {
         return <div>{ error }</div>
     }
     return (
+        <div>
+        <Typography variant="h4" component="h2">
+        All Submissions
+        </Typography>
         <List>{submissions.map(s => <Submission key={s.id} submission={s} deleteSubmission={handleDeleteSubmission}/>)}</List>
+        </div>
     )
 }
 
