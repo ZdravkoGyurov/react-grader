@@ -1,3 +1,4 @@
+import { Grid } from '@material-ui/core';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardContent from '@material-ui/core/CardContent';
@@ -21,7 +22,7 @@ export default function Course({ loggedInUser, course }) {
     const classes = useStyles();
 
     return (
-        <div>
+        <Grid item>
             <Card className={classes.root}>
                 <CardActionArea onClick={() => history.push(`/courses/${course.id}`, { course: course })}>
                     <CardMedia
@@ -39,6 +40,6 @@ export default function Course({ loggedInUser, course }) {
                     </CardContent>
                 </CardActionArea>
             </Card>
-        </div>
+        </Grid>
     );
 }
