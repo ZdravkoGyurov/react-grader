@@ -32,6 +32,10 @@ export default function AssignmentList({ loggedInUser }) {
         deleteAssignment(isMounted, assignments, setAssignments, id);
     }
 
+    const routeToAssignment = (a) => { 
+        history.push(`/courses/${location.state.course.id}/${a.id}`, { course: location.state.course, assignment: a}) // , { course: location.state.course, assignment: a}
+    }
+
     if (!isLoaded) {
         return <div>Loading...</div>
     }
@@ -45,8 +49,8 @@ export default function AssignmentList({ loggedInUser }) {
             <Typography>
                 Assignments
             </Typography>
-            <List>{assignments.map(a => <Assignment onClick={() => history.push(`/courses/${location.state.course.id}/${a.id}`)}
-                key={a.id} assignment={a} editAssignment={handleEditAssignment} deleteAssignment={handleDeleteAssignment}/>)}</List>
+            <List>{assignments.map(a => <div key={a.id} onClick={() => {routeToAssignment(a)}}><Assignment
+                key={a.id} assignment={a} editAssignment={handleEditAssignment} deleteAssignment={handleDeleteAssignment}/></div>)}</List>
         </div>
     )
 }
