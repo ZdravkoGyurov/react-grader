@@ -26,7 +26,7 @@ export default function Course({ loggedInUser, course }) {
     return (
         <div>
             <Card className={classes.root}>
-                <CardActionArea onClick={() => history.push(`/courses/${course.id}`)}>
+                <CardActionArea onClick={() => history.push(`/courses/${course.id}`, { course: course })}>
                     <CardMedia
                         className={classes.media}
                         image="course_background.jpg"
