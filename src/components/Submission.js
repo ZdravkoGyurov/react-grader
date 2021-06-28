@@ -21,46 +21,25 @@ const Submission = ({submission, deleteSubmission}) => {
     }
 
     return (
-        <div>
-           {/* <ListItem alignItems="flex-start">
-                <ListItemText primary={submission.status} />
-                <ListItemText primary={submission.results} />
-                <ListItemText primary={submission.userId} />
-                <ListItemSecondaryAction>
-                    {canDeleteSubmission ?
-                        <IconButton onClick={handleDeleteSubmission}>
-                            <DeleteIcon></DeleteIcon>
-                        </IconButton>
-                     : null}
-                </ListItemSecondaryAction>
-            </ListItem>
+        <TableRow key={submission.id}>
+            <TableCell>{submission.userId}</TableCell>
+            <TableCell>{submission.status}</TableCell>
+            <TableCell>{submission.results}</TableCell>
+            <TableCell>
+                {canDeleteSubmission ?
+                    <IconButton onClick={handleDeleteSubmission}>
+                        <DeleteIcon></DeleteIcon>
+                    </IconButton>
+                    : null}
+            </TableCell>
             <ConfirmationDialog 
                 open={confirmationOpen}
                 setOpen={setConfirmationOpen}
                 submit={handleSubmitDelete}
                 title="Delete submission"
-                message={"Are you sure you want to permanently delete the submission?"}></ConfirmationDialog>
-            <Divider/> */}
-            <TableRow key={submission.id}>
-                <TableCell>{submission.userId}</TableCell>
-                <TableCell>{submission.status}</TableCell>
-                <TableCell>{submission.results}</TableCell>
-                <TableCell>
-                    {canDeleteSubmission ?
-                        <IconButton onClick={handleDeleteSubmission}>
-                            <DeleteIcon></DeleteIcon>
-                        </IconButton>
-                     : null}
-                </TableCell>
-            </TableRow>
-            <ConfirmationDialog 
-                    open={confirmationOpen}
-                    setOpen={setConfirmationOpen}
-                    submit={handleSubmitDelete}
-                    title="Delete submission"
-                    message={"Are you sure you want to permanently delete the submission?"}>
+                message={"Are you sure you want to permanently delete the submission?"}>
             </ConfirmationDialog>
-        </div>
+        </TableRow>
     )
 }
 

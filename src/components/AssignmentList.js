@@ -1,9 +1,14 @@
-import { List, Typography } from "@material-ui/core";
 import { useEffect, useState } from "react";
 import { useHistory, useLocation, useParams } from "react-router-dom";
 import send from "../api/api";
 import { getAccessToken, isAuthorized } from '../userIdentity';
 import Assignment from "./Assignment";
+import { TableContainer } from "@material-ui/core";
+import { TableHead } from "@material-ui/core";
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import { TableRow } from "@material-ui/core";
+import TableCell from '@material-ui/core/TableCell';
 
 export default function AssignmentList({ loggedInUser }) {
     const [isLoaded, setIsLoaded] = useState(false);
@@ -40,13 +45,23 @@ export default function AssignmentList({ loggedInUser }) {
     }
     return (
         <div>
-            <Typography variant="h4" component="h2">{location.state.course.name}</Typography>
-            <Typography variant="h5" component="h2">{location.state.course.description}</Typography>
-            <Typography>
-                Assignments
-            </Typography>
-            <List>{assignments.map(a => <Assignment onClick={() => history.push(`/courses/${location.state.course.id}/${a.id}`)}
-                key={a.id} assignment={a} editAssignment={handleEditAssignment} deleteAssignment={handleDeleteAssignment}/>)}</List>
+            <TableContainer>
+                <Table aria-label="simple table">
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>Name</TableCell>
+                            <TableCell>Description</TableCell>
+                            <TableCell>Due Date</TableCell>
+                            <TableCell>Edit</TableCell>
+                            <TableCell>Delete</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                    {assignments.map(a => <Assignment key={a.id} assignment={a} editAssignment={handleEditAssignment} 
+                        deleteAssignment={handleDeleteAssignment}/>)}
+                    </TableBody>
+                </Table>
+            </TableContainer>
         </div>
     )
 }

@@ -18,11 +18,8 @@ const useStyles = makeStyles({
 
 export default function Course({ loggedInUser, course }) {
     let history = useHistory();
-
     const classes = useStyles();
 
-    // return <AssignmentList loggedInUser={loggedInUser} courseId={course.id} ></AssignmentList>
-    
     return (
         <div>
             <Card className={classes.root}>

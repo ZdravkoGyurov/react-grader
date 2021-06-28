@@ -40,11 +40,9 @@ const SubmissionList = ({loggedInUser}) => {
     }
     return (
         <div>
-        <Typography variant="h4" component="h2">
-        All Submissions
-        </Typography>
-        {/* <List>{submissions.map(s => <Submission key={s.id} submission={s} deleteSubmission={handleDeleteSubmission}/>)}</List> */}
-
+            <Typography variant="h4" component="h2">
+            All Submissions
+            </Typography>
             <TableContainer>
                 <Table aria-label="simple table">
                     <TableHead>
@@ -52,7 +50,7 @@ const SubmissionList = ({loggedInUser}) => {
                             <TableCell>User Id</TableCell>
                             <TableCell>Status</TableCell>
                             <TableCell>Results</TableCell>
-                            <TableCell>Delete</TableCell>
+                            <TableCell>Delete submission</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
