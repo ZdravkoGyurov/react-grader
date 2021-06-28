@@ -1,10 +1,13 @@
 import { Divider, IconButton, ListItem, ListItemSecondaryAction, ListItemText, Typography } from "@material-ui/core";
 import DeleteIcon from '@material-ui/icons/Delete';
 import React, { useState } from "react";
+import { isAuthorized } from "../userIdentity";
 import ConfirmationDialog from "./ConfirmationDialog";
 
 const PermissionsRequest = ({request, deleteRequest}) => {
     const [confirmationOpen, setConfirmationOpen] = useState(false);
+
+    const canDeleteRequest = isAuthorized('DELETE_PERMISSIONSREQUEST')
 
     const handleDeleteRequest = () => {
         setConfirmationOpen(true)
@@ -42,9 +45,11 @@ const PermissionsRequest = ({request, deleteRequest}) => {
                     }
                 />
                 <ListItemSecondaryAction>
-                    <IconButton onClick={handleDeleteRequest}>
-                        <DeleteIcon></DeleteIcon>
-                    </IconButton>
+                    { canDeleteRequest ?
+                        <IconButton onClick={handleDeleteRequest}>
+                            <DeleteIcon></DeleteIcon>
+                        </IconButton>
+                    : null }
                 </ListItemSecondaryAction>
             </ListItem>
             <ConfirmationDialog 

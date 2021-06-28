@@ -2,7 +2,7 @@ import { List } from "@material-ui/core";
 import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import send from "../api/api";
-import { getAccessToken } from '../userIdentity';
+import { getAccessToken, isAuthorized } from '../userIdentity';
 import User from "./User";
 
 const UserList = ({loggedInUser}) => {
@@ -14,7 +14,7 @@ const UserList = ({loggedInUser}) => {
     
     useEffect(() => {
         setIsMounted(true)
-        if (!loggedInUser || (loggedInUser.permissions && loggedInUser.permissions.includes('READ_USERS'))) {
+        if (!loggedInUser || !isAuthorized('READ_USERS')) {
             history.push('/sign-in')
         }
 

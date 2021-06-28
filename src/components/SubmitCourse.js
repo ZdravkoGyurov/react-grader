@@ -9,7 +9,7 @@ import Container from '@material-ui/core/Container';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
 import { useHistory } from "react-router-dom";
-import { getAccessToken } from '../userIdentity';
+import { getAccessToken, isAuthorized } from '../userIdentity';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -50,7 +50,7 @@ export default function SubmitCourse({ loggedInUser }) {
   const history = useHistory();
 
   useEffect(() => {
-    if (!loggedInUser) {
+    if (!loggedInUser || !isAuthorized('CREATE_COURSE')) {
       history.push('/sign-in')
     }
   });

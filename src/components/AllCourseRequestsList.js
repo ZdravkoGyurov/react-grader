@@ -2,7 +2,7 @@ import { List, Typography } from "@material-ui/core";
 import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import send from "../api/api";
-import { getAccessToken } from '../userIdentity';
+import { getAccessToken, isAuthorized } from '../userIdentity';
 import ApproveCourseRequest from "./ApproveCourseRequest";
 
 const AllCourseRequestsList = ({loggedInUser}) => {
@@ -14,7 +14,7 @@ const AllCourseRequestsList = ({loggedInUser}) => {
 
     useEffect(() => {
         setIsMounted(true)
-        if (!loggedInUser || (loggedInUser.permissions && loggedInUser.permissions.includes('READ_COURSESREQUESTS'))) {
+        if (!loggedInUser || !isAuthorized('READ_COURSESREQUESTS')) {
             history.push('/sign-in')
         }
 

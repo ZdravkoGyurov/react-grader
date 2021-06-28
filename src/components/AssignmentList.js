@@ -2,7 +2,7 @@ import { List } from "@material-ui/core";
 import { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import send from "../api/api";
-import { getAccessToken } from '../userIdentity';
+import { getAccessToken, isAuthorized } from '../userIdentity';
 import Assignment from "./Assignment";
 
 export default function AssignmentList({ loggedInUser }) {
@@ -15,7 +15,7 @@ export default function AssignmentList({ loggedInUser }) {
 
     useEffect(() => {
         setIsMounted(true);
-        if (!loggedInUser || (loggedInUser.permissions && loggedInUser.permissions.includes('READ_ASSIGNMENTS'))) {
+        if (!loggedInUser || !isAuthorized('READ_ASSIGNMENTS')) {
             history.push('/sign-in');
         }
 

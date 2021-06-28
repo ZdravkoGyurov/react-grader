@@ -23,7 +23,7 @@ export default function BrowseCourses({loggedInUser}) {
 
     useEffect(() => {
         setIsMounted(true);
-        if (!loggedInUser || (loggedInUser.permissions && loggedInUser.permissions.includes('READ_ALL_COURSES'))) {
+        if (!loggedInUser || !isAuthorized('READ_ALL_COURSES')) {
             history.push('/sign-in');
         }
 

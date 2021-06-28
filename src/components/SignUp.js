@@ -57,6 +57,10 @@ export default function SignUp({loggedInUser}) {
   useEffect(() => {
     setIsMounted(true)
 
+    if (loggedInUser) {
+      history.push('/courses')
+    }
+
     return () => { setIsMounted(false) }
 }, [isMounted, history, loggedInUser])
 

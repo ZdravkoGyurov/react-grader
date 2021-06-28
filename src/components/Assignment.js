@@ -34,7 +34,7 @@ export default function Assignment({ assignment, editAssignment, deleteAssignmen
     }
 
     const handleSubmitDelete = () => {
-        deleteAssignment(Assignment.id);
+        deleteAssignment(assignment.id);
     }
     
     return (
@@ -44,12 +44,16 @@ export default function Assignment({ assignment, editAssignment, deleteAssignmen
                 <ListItemText primary={assignment.description} />
                 <ListItemText primary={assignment.dueDate} />
                 <ListItemSecondaryAction>
-                    <IconButton onClick={handleEditAssignment}>
-                        <EditIcon></EditIcon>
-                    </IconButton>
-                    <IconButton onClick={handleDeleteAssignment}>
-                        <DeleteIcon></DeleteIcon>
-                    </IconButton>
+                    { canEditAssignment ? 
+                        <IconButton onClick={handleEditAssignment}>
+                            <EditIcon></EditIcon>
+                        </IconButton>
+                     : null }
+                    { canDeleteAssignment ?
+                        <IconButton onClick={handleDeleteAssignment}>
+                            <DeleteIcon></DeleteIcon>
+                        </IconButton>
+                     : null}
                 </ListItemSecondaryAction>
             </ListItem>
             <EditAssignmentDialog open={open} setOpen={setOpen} editAssignment={editAssignment} assignment={assignment}/>

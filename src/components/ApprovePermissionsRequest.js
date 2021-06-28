@@ -2,8 +2,11 @@ import { Divider, IconButton, ListItem, ListItemSecondaryAction, ListItemText, T
 import CheckIcon from '@material-ui/icons/Check';
 import CloseIcon from '@material-ui/icons/Close';
 import React from "react";
+import { isAuthorized } from '../userIdentity';
 
 const ApprovePermissionsRequest = ({request, editRequest}) => {
+    const canUpdateReq = isAuthorized('UPDATE_PERMISSIONSREQUEST')
+
     const handleApproveRequest = () => {
         editRequest(request.id, {status: 'APPROVED'})
     }
@@ -46,7 +49,7 @@ const ApprovePermissionsRequest = ({request, editRequest}) => {
                         </React.Fragment>
                     }
                 />
-                {request.status === 'PENDING' ? 
+                {request.status === 'PENDING' && canUpdateReq ? 
                 <ListItemSecondaryAction>
                     <IconButton onClick={handleApproveRequest}>
                         <CheckIcon/>

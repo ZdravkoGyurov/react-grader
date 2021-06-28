@@ -1,8 +1,7 @@
 import { Button, List, Typography } from "@material-ui/core";
 import { useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
 import send from "../api/api";
-import { getAccessToken } from '../userIdentity';
+import { getAccessToken, isAuthorized } from '../userIdentity';
 import PermissionsRequest from "./PermissionsRequest";
 import AddIcon from '@material-ui/icons/Add';
 import CreatePermissionsRequestDialog from "./CreatePermissionsRequestDialog";
@@ -13,17 +12,18 @@ const PermissionsRequestsList = ({loggedInUser}) => {
     const [error, setError] = useState(null)
     const [isMounted, setIsMounted] = useState(false)
     const [createOpen, setCreateOpen] = useState(false)
-    let history = useHistory()
+
+    const canCreateRequest = isAuthorized('CREATE_PERMISSIONSREQUEST')
 
     useEffect(() => {
         setIsMounted(true)
-        if (!loggedInUser || (loggedInUser.permissions && loggedInUser.permissions.includes('READ_PERMISSIONSREQUESTS'))) {
-            history.push('/sign-in')
+        if (!loggedInUser || !isAuthorized('READ_PERMISSIONSREQUESTS')) {
+            return
         }
 
         getPermissionsRequests(isMounted, setIsLoaded, setRequests, setError)
         return () => { setIsMounted(false) }
-    }, [isMounted, history, loggedInUser])
+    }, [isMounted, loggedInUser])
 
     const handleOpenCreateDialog = () => {
         setCreateOpen(true)
@@ -47,15 +47,17 @@ const PermissionsRequestsList = ({loggedInUser}) => {
             <Typography variant="h4">
                 Requests for permissions
             </Typography>
-            <Button
-                sx={{ pt: 3 }}
-                variant="contained"
-                color="primary"
-                startIcon={<AddIcon />}
-                onClick={handleOpenCreateDialog}
-            >
-                Create
-            </Button>
+            { canCreateRequest ?
+                <Button
+                    sx={{ pt: 3 }}
+                    variant="contained"
+                    color="primary"
+                    startIcon={<AddIcon />}
+                    onClick={handleOpenCreateDialog}
+                >
+                    Create
+                </Button>
+            : null }
             <List>{requests.map(r => <PermissionsRequest key={r.id} request={r} deleteRequest={handleDeleteRequest}/>)}</List>
             <CreatePermissionsRequestDialog open={createOpen} setOpen={setCreateOpen} createRequest={handleCreateRequest}/>
         </div>

@@ -4,7 +4,7 @@ import { useHistory } from "react-router-dom";
 import send from "../api/api";
 import '../styles/CourseList.css';
 import Course from './Course';
-import { getAccessToken } from '../userIdentity';
+import { getAccessToken, isAuthorized } from '../userIdentity';
 import Typography from '@material-ui/core/Typography';
 
 export default function CourseList({ loggedInUser }) {
@@ -16,7 +16,7 @@ export default function CourseList({ loggedInUser }) {
     
     useEffect(() => {
         setIsMounted(true);
-        if (!loggedInUser || (loggedInUser.permissions && loggedInUser.permissions.includes('READ_COURSES'))) {
+        if (!loggedInUser || !isAuthorized('READ_COURSES')) {
             history.push('/sign-in');
         }
 

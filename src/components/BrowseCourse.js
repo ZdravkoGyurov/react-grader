@@ -26,8 +26,8 @@ export default function BrowseCourse({course, createRequest, editCourse, deleteC
     const [open, setOpen] = useState(false);
     const [confirmationOpen, setConfirmationOpen] = useState(false);
     const classes = useStyles();
-    const canRequestJoin = isAuthorized('CREATE_COURSESREQUEST')
 
+    const canRequestJoin = isAuthorized('CREATE_COURSESREQUEST')
     const canEditCourse = isAuthorized('UPDATE_COURSE');
     const canDeleteCourse = isAuthorized('DELETE_COURSE');
 

@@ -6,10 +6,14 @@ import InfoIcon from '@material-ui/icons/Info';
 import React, { useState } from "react";
 import ConfirmationDialog from "./ConfirmationDialog";
 import EditUserDialog from "./EditUserDialog";
+import { isAuthorized } from '../userIdentity';
 
 const User = ({user, editUser, deleteUser}) => {
     const [open, setOpen] = useState(false);
     const [confirmationOpen, setConfirmationOpen] = useState(false);
+
+    const canEditUser = isAuthorized('UPDATE_USER')
+    const canDeleteUser = isAuthorized('DELETE_USER')
 
     const handleEditUser = () => {
         setOpen(true)
@@ -52,12 +56,16 @@ const User = ({user, editUser, deleteUser}) => {
                     }
                 />
                 <ListItemSecondaryAction>
-                    <IconButton onClick={handleEditUser}>
-                        <EditIcon></EditIcon>
-                    </IconButton>
-                    <IconButton onClick={handleDeleteUser}>
-                        <DeleteIcon></DeleteIcon>
-                    </IconButton>
+                    { canEditUser ?
+                        <IconButton onClick={handleEditUser}>
+                            <EditIcon></EditIcon>
+                        </IconButton>
+                    : null }
+                    { canDeleteUser ?
+                        <IconButton onClick={handleDeleteUser}>
+                            <DeleteIcon></DeleteIcon>
+                        </IconButton>
+                    : null }
                 </ListItemSecondaryAction>
             </ListItem>
             <EditUserDialog open={open} setOpen={setOpen} editUser={editUser} user={user}/>
