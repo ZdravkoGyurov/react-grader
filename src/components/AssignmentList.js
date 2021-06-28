@@ -45,8 +45,8 @@ export default function AssignmentList({ loggedInUser }) {
             <Typography>
                 Assignments
             </Typography>
-            <List>{assignments.map(a => <Assignment key={a.id} assignment={a} 
-                editAssignment={handleEditAssignment} deleteAssignment={handleDeleteAssignment}/>)}</List>
+            <List>{assignments.map(a => <Assignment onClick={() => history.push(`/courses/${location.state.course.id}/${a.id}`)}
+                key={a.id} assignment={a} editAssignment={handleEditAssignment} deleteAssignment={handleDeleteAssignment}/>)}</List>
         </div>
     )
 }

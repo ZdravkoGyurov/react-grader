@@ -1,9 +1,15 @@
-import { List } from "@material-ui/core";
+import { TableContainer } from "@material-ui/core";
+import { TableHead } from "@material-ui/core";
+import { List, Typography } from "@material-ui/core";
 import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import send from "../api/api";
 import { getAccessToken, isAuthorized } from '../userIdentity';
 import Submission from "./Submission";
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import { TableRow } from "@material-ui/core";
+import TableCell from '@material-ui/core/TableCell';
 
 const SubmissionList = ({loggedInUser}) => {
     const [isLoaded, setIsLoaded] = useState(false);
@@ -37,7 +43,23 @@ const SubmissionList = ({loggedInUser}) => {
         <Typography variant="h4" component="h2">
         All Submissions
         </Typography>
-        <List>{submissions.map(s => <Submission key={s.id} submission={s} deleteSubmission={handleDeleteSubmission}/>)}</List>
+        {/* <List>{submissions.map(s => <Submission key={s.id} submission={s} deleteSubmission={handleDeleteSubmission}/>)}</List> */}
+
+            <TableContainer>
+                <Table aria-label="simple table">
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>User Id</TableCell>
+                            <TableCell>Status</TableCell>
+                            <TableCell>Results</TableCell>
+                            <TableCell>Delete</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {submissions.map(s => <Submission key={s.id} submission={s} deleteSubmission={handleDeleteSubmission}/>)}
+                    </TableBody>
+                </Table>
+            </TableContainer>
         </div>
     )
 }

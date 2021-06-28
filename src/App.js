@@ -61,7 +61,10 @@ function App() {
             <Route exact path="/courses/:courseId">
               <AssignmentList loggedInUser={loggedInUser} />
             </Route>
-            <Route exact path="/submissions">
+            <Route exact path="/courses/:courseId/:assignmentId">
+              <ApproveRequests loggedInUser={loggedInUser} />
+            </Route>
+            <Route exact path="/all-submissions">
               <SubmissionList loggedInUser={loggedInUser} />
             </Route>
             <Route path="/">
