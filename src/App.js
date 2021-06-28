@@ -14,6 +14,7 @@ import Requests from './components/Requests';
 import ApproveRequests from './components/ApproveRequests';
 import AssignmentList from './components/AssignmentList';
 import BrowseCourses from './components/BrowseCourses';
+import Home from './components/Home';
 
 function App() {
   const [loggedInUser, setLoggedInUser] = useState(null);
@@ -33,7 +34,7 @@ function App() {
       <NavBar loggedInUser={loggedInUser} handleSignOut={handleSignOut}/>
         <Switch>
             <Route exact path="/sign-in">
-              <SignIn handleSignIn={handleSignIn}/>
+              <SignIn loggedInUser={loggedInUser} handleSignIn={handleSignIn}/>
             </Route>
             <Route exact path="/sign-up">
               <SignUp />
@@ -60,7 +61,7 @@ function App() {
               <AssignmentList loggedInUser={loggedInUser} />
             </Route>
             <Route path="/">
-              <div>Home</div>
+              <Home/>
             </Route>
           </Switch>
       </Container>

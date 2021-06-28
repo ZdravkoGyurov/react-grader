@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -45,9 +45,15 @@ const validationSchema = yup.object({
     .required('Password is required')
 });
 
-export default function SignIn({ handleSignIn }) {
+export default function SignIn({ loggedInUser, handleSignIn }) {
   const classes = useStyles();
   const history = useHistory();
+
+  useEffect(() => {
+    if (loggedInUser) {
+      history.push('/courses')
+    }
+  })
 
   const formik = useFormik({
     initialValues: {

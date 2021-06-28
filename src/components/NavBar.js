@@ -1,8 +1,17 @@
 import { AppBar, IconButton, MenuItem, Toolbar, Typography } from "@material-ui/core";
 import { Link } from "react-router-dom";
+import { isAuthorized } from "../userIdentity";
 import SignOut from './SignOut';
 
 function NavBar({ loggedInUser, handleSignOut }) {
+    const canReadUsers = loggedInUser && isAuthorized('READ_USERS')
+    const canReadCourses = loggedInUser && isAuthorized('READ_COURSES')
+    const canReadAllCourses = loggedInUser && isAuthorized('READ_ALL_COURSES')
+    const canReadPermissionRequests = loggedInUser && isAuthorized('READ_PERMISSIONSREQUESTS')
+    const canReadCourseRequests = loggedInUser && isAuthorized('READ_COURSESREQUESTS')
+    const canReadAllCRequests = loggedInUser && isAuthorized('READ_ALL_PERMISSIONSREQUESTS')
+    const canReadAllPRequests = loggedInUser && isAuthorized('READ_ALL_COURSESREQUESTS')
+
     return (
         <div>
             <AppBar position="static">
@@ -12,11 +21,11 @@ function NavBar({ loggedInUser, handleSignOut }) {
                     </IconButton>
                     {!loggedInUser ? <MenuItem component={Link} to={'/sign-in'}>Sign In</MenuItem> : null}
                     {!loggedInUser ? <MenuItem component={Link} to={'/sign-up'}>Sign Up</MenuItem> : null}
-                    {loggedInUser ? <MenuItem component={Link} to={'/users'}>Users</MenuItem> : null}
-                    {loggedInUser ? <MenuItem component={Link} to={'/courses'}>Courses</MenuItem> : null}
-                    {loggedInUser ? <MenuItem component={Link} to={'/browse-courses'}>Browse Courses</MenuItem> : null}
-                    {loggedInUser ? <MenuItem component={Link} to={'/my-requests'}>My Requests</MenuItem> : null}
-                    {loggedInUser ? <MenuItem component={Link} to={'/approve-requests'}>Approve Requests</MenuItem> : null}
+                    {loggedInUser && canReadUsers ? <MenuItem component={Link} to={'/users'}>Users</MenuItem> : null}
+                    {loggedInUser && canReadCourses ? <MenuItem component={Link} to={'/courses'}>Courses</MenuItem> : null}
+                    {loggedInUser && canReadAllCourses ? <MenuItem component={Link} to={'/browse-courses'}>Browse Courses</MenuItem> : null}
+                    {loggedInUser && canReadPermissionRequests && canReadCourseRequests ? <MenuItem component={Link} to={'/my-requests'}>My Requests</MenuItem> : null}
+                    {loggedInUser && canReadAllCRequests && canReadAllPRequests ? <MenuItem component={Link} to={'/approve-requests'}>Approve Requests</MenuItem> : null}
                     {loggedInUser ? <SignOut handleSignOut={handleSignOut} />: null}
                 </Toolbar>
             </AppBar>
