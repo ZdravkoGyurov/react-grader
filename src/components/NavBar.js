@@ -1,6 +1,7 @@
+import { Divider } from "@material-ui/core";
 import { AppBar, IconButton, MenuItem, Toolbar, Typography } from "@material-ui/core";
 import { Link } from "react-router-dom";
-import { isAuthorized } from "../userIdentity";
+import { getFullname, isAuthorized } from "../userIdentity";
 import SignOut from './SignOut';
 
 function NavBar({ loggedInUser, handleSignOut }) {
@@ -28,11 +29,19 @@ function NavBar({ loggedInUser, handleSignOut }) {
                     {loggedInUser && canReadAllSubmissions ? <MenuItem component={Link} to={'/submissions'}>Submissions</MenuItem> : null}
                     {loggedInUser && canReadPermissionRequests && canReadCourseRequests ? <MenuItem component={Link} to={'/my-requests'}>My Requests</MenuItem> : null}
                     {loggedInUser && canReadAllCRequests && canReadAllPRequests ? <MenuItem component={Link} to={'/approve-requests'}>Approve Requests</MenuItem> : null}
+                    <Divider orientation="vertical" variant="inset" light={true} flexItem />
+                    {loggedInUser ? loggedInUserInfo() : null }
                     {loggedInUser ? <SignOut handleSignOut={handleSignOut} />: null}
                 </Toolbar>
             </AppBar>
         </div>
       );
+}
+
+function loggedInUserInfo() {
+    return (
+        <MenuItem button={false}>{getFullname()}</MenuItem>
+    )
 }
 
 export default NavBar;
