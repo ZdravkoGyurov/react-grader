@@ -43,7 +43,7 @@ const AssignmentSubmissionList = ({loggedInUser}) => {
 
 function getAssignmentSubmissions(isMounted, setIsLoaded, assignmentId, setAssignmentSubmissions, setError) {
     send({
-        url: `http://localhost:8080/api/submissions`,
+        url: `http://localhost:8080/api/submissions?assignmentId=${encodeURIComponent(assignmentId)}`,
         method: 'GET',
         headers: new Headers({
             'Authorization': `Bearer ${getAccessToken()}`
