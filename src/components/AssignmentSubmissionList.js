@@ -36,7 +36,7 @@ const AssignmentSubmissionList = ({loggedInUser}) => {
         <Typography variant="h4" component="h2">
         Submissions
         </Typography>
-        <List>{assignmentSubmissions.map(s => <AssignmentSubmission key={s.id} submission={s} />)}</List>
+        <List>{assignmentSubmissions.map(s => <AssignmentSubmission key={s.id} assignmentSubmission={s} />)}</List>
         </div>
     )
 }
@@ -48,7 +48,7 @@ function getAssignmentSubmissions(isMounted, setIsLoaded, assignmentId, setAssig
         headers: new Headers({
             'Authorization': `Bearer ${getAccessToken()}`
         }),
-        data: {assignmentId: assignmentId},
+        data: null,
         expectedStatusCode: 200
     }, (result) => {
         if (isMounted) {
