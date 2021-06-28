@@ -10,6 +10,7 @@ import TableBody from '@material-ui/core/TableBody';
 import { TableRow } from "@material-ui/core";
 import TableCell from '@material-ui/core/TableCell';
 import Typography from '@material-ui/core/Typography';
+import { List } from "@material-ui/core";
 
 export default function AssignmentList({ loggedInUser }) {
     const [isLoaded, setIsLoaded] = useState(false);
@@ -55,23 +56,9 @@ export default function AssignmentList({ loggedInUser }) {
             <Typography>
                 Assignments
             </Typography>
-            <TableContainer>
-                <Table aria-label="simple table">
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>Name</TableCell>
-                            <TableCell>Description</TableCell>
-                            <TableCell>Due Date</TableCell>
-                            <TableCell>Edit</TableCell>
-                            <TableCell>Delete</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                    {assignments.map(a => <div key={a.id} onClick={() => {routeToAssignment(a)}}><Assignment
+            <List>{assignments.map(a => <div key={a.id} onClick={() => {routeToAssignment(a)}}><Assignment
                 key={a.id} assignment={a} editAssignment={handleEditAssignment} deleteAssignment={handleDeleteAssignment}/></div>)}
-                    </TableBody>
-                </Table>
-            </TableContainer>
+            </List>
         </div>
     )
 }
