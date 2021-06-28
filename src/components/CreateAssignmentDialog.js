@@ -88,12 +88,28 @@ export default function CreateAssignmentDialog({ open, setOpen, createAssignment
                         error={formik.touched.description && Boolean(formik.errors.description)}
                         helperText={formik.touched.description && formik.errors.description}
                     />
-                    <TextField
+                    {/* <TextField
                         variant="outlined"
                         margin="dense"
                         id="dueDate"
                         label="Assignment due date"
                         type="text"
+                        name="dueDate"
+                        fullWidth
+                        value={formik.values.dueDate}
+                        onChange={formik.handleChange}
+                        error={formik.touched.dueDate && Boolean(formik.errors.dueDate)}
+                        helperText={formik.touched.dueDate && formik.errors.dueDate}
+                    /> */}
+
+                    <TextField
+                        id="datetime-local"
+                        label="Due date"
+                        type="datetime-local"
+                        defaultValue="2021-05-24T10:30"
+                        InputLabelProps={{
+                        shrink: true,
+                        }}
                         name="dueDate"
                         fullWidth
                         value={formik.values.dueDate}
