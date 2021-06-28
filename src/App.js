@@ -15,6 +15,7 @@ import ApproveRequests from './components/ApproveRequests';
 import AssignmentList from './components/AssignmentList';
 import BrowseCourses from './components/BrowseCourses';
 import Home from './components/Home';
+import SubmissionList from './components/SubmissionList';
 
 function App() {
   const [loggedInUser, setLoggedInUser] = useState(null);
@@ -59,6 +60,9 @@ function App() {
             </Route>
             <Route exact path="/courses/:courseId">
               <AssignmentList loggedInUser={loggedInUser} />
+            </Route>
+            <Route exact path="/submissions">
+              <SubmissionList loggedInUser={loggedInUser} />
             </Route>
             <Route path="/">
               <Home/>

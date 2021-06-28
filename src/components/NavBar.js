@@ -11,6 +11,7 @@ function NavBar({ loggedInUser, handleSignOut }) {
     const canReadCourseRequests = loggedInUser && isAuthorized('READ_COURSESREQUESTS')
     const canReadAllCRequests = loggedInUser && isAuthorized('READ_ALL_PERMISSIONSREQUESTS')
     const canReadAllPRequests = loggedInUser && isAuthorized('READ_ALL_COURSESREQUESTS')
+    const canReadAllSubmissions = loggedInUser && isAuthorized('READ_ALL_SUBMISSIONS')
 
     return (
         <div>
@@ -24,6 +25,7 @@ function NavBar({ loggedInUser, handleSignOut }) {
                     {loggedInUser && canReadUsers ? <MenuItem component={Link} to={'/users'}>Users</MenuItem> : null}
                     {loggedInUser && canReadCourses ? <MenuItem component={Link} to={'/courses'}>Courses</MenuItem> : null}
                     {loggedInUser && canReadAllCourses ? <MenuItem component={Link} to={'/browse-courses'}>Browse Courses</MenuItem> : null}
+                    {loggedInUser && canReadAllSubmissions ? <MenuItem component={Link} to={'/submissions'}>Submissions</MenuItem> : null}
                     {loggedInUser && canReadPermissionRequests && canReadCourseRequests ? <MenuItem component={Link} to={'/my-requests'}>My Requests</MenuItem> : null}
                     {loggedInUser && canReadAllCRequests && canReadAllPRequests ? <MenuItem component={Link} to={'/approve-requests'}>Approve Requests</MenuItem> : null}
                     {loggedInUser ? <SignOut handleSignOut={handleSignOut} />: null}
