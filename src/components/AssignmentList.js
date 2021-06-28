@@ -10,6 +10,7 @@ import TableBody from '@material-ui/core/TableBody';
 import { TableRow } from "@material-ui/core";
 import TableCell from '@material-ui/core/TableCell';
 import Typography from '@material-ui/core/Typography';
+import { List } from "@material-ui/core";
 
 export default function AssignmentList({ loggedInUser }) {
     const [isLoaded, setIsLoaded] = useState(false);
