@@ -5,7 +5,7 @@ import send from "../api/api";
 import '../styles/CourseList.css';
 import Course from './Course';
 import { getAccessToken, isAuthorized } from '../userIdentity';
-import Typography from '@material-ui/core/Typography';
+import { Grid, Typography } from "@material-ui/core";
 
 export default function CourseList({ loggedInUser }) {
     const [isLoaded, setIsLoaded] = useState(false);
@@ -35,9 +35,9 @@ export default function CourseList({ loggedInUser }) {
     return (
         <div className="courses">
                 <Typography variant="h4" component="h2">My courses</Typography>
-                <div className="Courses-wrapper">
+                <Grid container spacing={2}>
                     {courses.map(c => <Course key={c.id} loggedInUser={loggedInUser} course={c}/>)}
-                </div>
+                </Grid>
         </div>
     )
 }
