@@ -19,6 +19,7 @@ export default function AssignmentList({ loggedInUser }) {
     let location = useLocation()
     let history = useHistory()
     const {courseId} = useParams();
+    const course = location.state.course
 
     useEffect(() => {
         setIsMounted(true);
@@ -36,10 +37,6 @@ export default function AssignmentList({ loggedInUser }) {
 
     const handleDeleteAssignment = (id) => {
         deleteAssignment(isMounted, assignments, setAssignments, id);
-    }
-
-    const routeToAssignment = (a) => { 
-        history.push(`/courses/${location.state.course.id}/${a.id}`, { course: location.state.course, assignment: a}) // , { course: location.state.course, assignment: a}
     }
 
     if (!isLoaded) {
@@ -67,8 +64,7 @@ export default function AssignmentList({ loggedInUser }) {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                    {assignments.map(a => <div key={a.id} onClick={() => {routeToAssignment(a)}}><Assignment
-                key={a.id} assignment={a} editAssignment={handleEditAssignment} deleteAssignment={handleDeleteAssignment}/></div>)}
+                    {assignments.map(a => <Assignment key={a.id} course={course} assignment={a} editAssignment={handleEditAssignment} deleteAssignment={handleDeleteAssignment}/>)}
                     </TableBody>
                 </Table>
             </TableContainer>

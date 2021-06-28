@@ -9,6 +9,7 @@ import ConfirmationDialog from "./ConfirmationDialog";
 import EditAssignmentDialog from "./EditAssignmentDialog";
 import { TableRow } from "@material-ui/core";
 import TableCell from '@material-ui/core/TableCell';
+import { useHistory, useLocation } from "react-router-dom";
 
 const useStyles = makeStyles({
     root: {
@@ -26,6 +27,8 @@ export default function Assignment({ assignment, editAssignment, deleteAssignmen
     const classes = useStyles();
     const canEditAssignment = isAuthorized('UPDATE_ASSIGNMENT');
     const canDeleteAssignment = isAuthorized('DELETE_ASSIGNMENT');
+    let location = useLocation()
+    let history = useHistory()
 
     const handleEditAssignment = () => {
         setOpen(true);
@@ -38,10 +41,14 @@ export default function Assignment({ assignment, editAssignment, deleteAssignmen
     const handleSubmitDelete = () => {
         deleteAssignment(assignment.id);
     }
+
+    const routeToAssignment = (a) => { 
+        history.push(`/courses/${location.state.course.id}/${a.id}`, { course: location.state.course, assignment: a}) // , { course: location.state.course, assignment: a}
+    }
     
     return (
         <TableRow key={assignment.id}>
-            <TableCell>{assignment.name}</TableCell>
+            <TableCell><div onClick={() => {routeToAssignment(assignment)}}>{assignment.name}</div></TableCell>
             <TableCell>{assignment.description}</TableCell>
             <TableCell>{assignment.dueDate}</TableCell>
             <TableCell>
