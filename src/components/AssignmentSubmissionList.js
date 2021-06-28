@@ -33,9 +33,11 @@ const AssignmentSubmissionList = ({loggedInUser}) => {
     }
     return (
         <div>
-        <Typography variant="h4" component="h2">
-        Submissions
-        </Typography>
+        <Typography variant="h4" component="h2">{course.name}</Typography>
+        <Typography variant="h5" component="h2">{course.description}</Typography>
+        <Typography variant="h4" component="h2">{assignment.name}</Typography>
+        <Typography variant="h5" component="h2">{assignment.description}</Typography>
+        <Typography variant="h4" component="h2">Submissions</Typography>
         <List>{assignmentSubmissions.map(s => <AssignmentSubmission key={s.id} assignmentSubmission={s} />)}</List>
         </div>
     )
