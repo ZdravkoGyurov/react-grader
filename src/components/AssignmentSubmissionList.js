@@ -1,3 +1,4 @@
+import { Button } from "@material-ui/core";
 import { List, Typography } from "@material-ui/core";
 import { useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
@@ -21,9 +22,16 @@ const AssignmentSubmissionList = ({loggedInUser}) => {
             history.push('/sign-in');
         }
 
-        getAssignmentSubmissions(isMounted, setIsLoaded, assignment.id, setAssignmentSubmissions, setError);
+        getAssignmentSubmissions(isMounted, setIsLoaded, assignment.id, setAssignmentSubmissions, setError)
+        setInterval(() => {
+            getAssignmentSubmissions(isMounted, setIsLoaded, assignment.id, setAssignmentSubmissions, setError)
+        }, 5000)
         return () => { setIsMounted(false); }
     }, [isMounted, history, loggedInUser]);
+
+    const handleSubmit = () => {
+        createSubmission(isMounted, assignmentSubmissions, setAssignmentSubmissions, assignment.id)
+    }
 
     if (!isLoaded) {
         return <div>Loading...</div>
@@ -33,12 +41,36 @@ const AssignmentSubmissionList = ({loggedInUser}) => {
     }
     return (
         <div>
-        <Typography variant="h4" component="h2">
-        Submissions
-        </Typography>
-        <List>{assignmentSubmissions.map(s => <AssignmentSubmission key={s.id} assignmentSubmission={s} />)}</List>
+            <Typography variant="h4" component="h2">{course.name}</Typography>
+            <Typography variant="h5" component="h2">{course.description}</Typography>
+            <Typography variant="h4" component="h2">{assignment.name}</Typography>
+            <Typography variant="h5" component="h2">{assignment.description}</Typography>
+            <Typography variant="h4" component="h2">Submissions</Typography>
+            <Button variant="contained" color="primary" onClick={handleSubmit}>Submit</Button>
+            <List>{assignmentSubmissions.map(s => <AssignmentSubmission key={s.id} assignmentSubmission={s} />)}</List>
         </div>
     )
+}
+
+function createSubmission(isMounted, assignmentSubmissions, setAssignmentSubmissions, assignmentId) {
+    send({
+        url: `http://localhost:8080/api/submissions`,
+        method: 'POST',
+        headers: new Headers({
+            'Authorization': `Bearer ${getAccessToken()}`,
+            'Content-Type': 'application/json'
+        }),
+        data: { assignmentId: assignmentId },
+        expectedStatusCode: 200
+    }, (result) => {
+        if (isMounted) {
+            const newSubmissions = [...assignmentSubmissions];
+            newSubmissions.push(result);
+            setAssignmentSubmissions(newSubmissions);
+        }
+    }, (error) => {
+        alert(error);
+    })
 }
 
 function getAssignmentSubmissions(isMounted, setIsLoaded, assignmentId, setAssignmentSubmissions, setError) {
